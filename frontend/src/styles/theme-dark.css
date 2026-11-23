@@ -1,0 +1,940 @@
+/* ============================================================
+   深色主题覆盖表
+   · 全部规则都在 @media screen + :root[data-theme="dark"] 作用域内：
+     浅色主题完全不受影响，打印/导出自动回落到浅色。
+   · 前缀 :root[data-theme="dark"] 让每条规则比原规则多一级特异性，
+     因此无需 !important 也能压过既有取值（原规则带 !important 的已同步）。
+   · 前半部分由 scripts 一次性生成（把浅色字面量按角色映射到 theme.css 的 token），
+     后半部分“人工整理区”处理渐变、半透明层、语义状态色、首页舞台与 SVG。
+   · 新增浅色规则若也要深色，请在此文件补对应覆盖（保持同一 @media 包裹）。
+   ============================================================ */
+@media screen {
+  /* ---- components/layout/AppHeader.css ---- */
+  :root[data-theme="dark"] .ain-header { background: var(--ain-surface-2); border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-header .ain-brand { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-header .ain-brand-icon { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-header .ain-brand small { border-left: 1px solid var(--ain-border); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-header .ain-nav a { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-header .ain-nav a:hover { color: var(--ain-link); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-header .ain-nav a.active { color: var(--ain-link); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-header .ain-header-status { color: var(--ain-link); }
+
+  /* ---- App.css ---- */
+  :root[data-theme="dark"] .ain-background { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-button { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-button:hover:not(:disabled) { color: var(--ain-text-strong); border-color: var(--ain-border-strong); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-shell .ain-button.ain-primary { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-button:disabled { color: var(--ain-text-faint); background: var(--ain-surface-2); border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-page-tag { color: var(--ain-text-strong); background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-home-hero .ain-home-title { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-home-title em { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-home-lead { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-home-status { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-home-ai { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-home-ai h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-home-ai > div > p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-home-example { background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-home-example > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-home-example > p { color: var(--ain-text-strong) !important; }
+  :root[data-theme="dark"] .ain-home-tool-flow { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-home-tool-flow b { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-home-example a,
+:root[data-theme="dark"] .ain-home-entry a { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-home-section-heading h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-home-section-heading p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workflow li { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workflow-number { color: var(--ain-text-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-workflow h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workflow p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-home-entry { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-home-entry h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-home-entry p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-pending-page p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-footer { border-top: 1px solid var(--ain-border); color: var(--ain-link); }
+
+  /* ---- styles/StatusFeedback.css ---- */
+  :root[data-theme="dark"] .ain-shell .ain-button:not(.ain-primary):hover:not(:disabled) { border-color: var(--ain-border); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-shell [data-tone] { border: 1px solid var(--ain-border); color: var(--ain-text); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-shell [data-tone="info"] { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-kpi-card.ain-kpi-warning { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-kpi-scope-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-diagnosis-overview.is-anomaly { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-evidence-metric-grid article[data-evidence-status="warning"] { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-result-badge { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-shell .ain-diagnosis-sources button.is-active,
+:root[data-theme="dark"] .ain-shell .ain-suggestion-card button[aria-pressed="true"] { border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-error,
+:root[data-theme="dark"] .ain-shell .ain-query-error,
+:root[data-theme="dark"] .ain-shell .ain-query-record.is-error { border-left: 3px solid var(--ain-error-border); }
+  :root[data-theme="dark"] .ain-shell .ain-management-warning { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-execution-state { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-load-state { color: var(--ain-text); }
+
+  /* ---- styles/VisualCompact.css ---- */
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-ai-v2 { border: 1px solid var(--ain-border); border-top: 2px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-ai-source-badge { background: var(--ain-surface-3); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-ai-v2 .ain-query-form textarea { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-shell .ain-filter-panel .ain-scope-form :is(input,
+:root[data-theme="dark"] select) { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-shell .ain-ai-v2 .ain-query-send-row > .ain-button.ain-primary:not(:disabled) { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-ai-v2 .ain-query-send-row > .ain-button.ain-primary:hover:not(:disabled) { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-trend-grid .ain-slot-heading p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module:is(.ain-ai-v2,
+:root[data-theme="dark"] .ain-data-module,
+:root[data-theme="dark"] .ain-diagnosis-v2,
+:root[data-theme="dark"] .ain-management-module) { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module > .ain-feature-heading { border-bottom: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module .ain-feature-heading .ain-feature-title { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module .ain-feature-heading .ain-module-title p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module .ain-module-number { color: var(--ain-link); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module > header:focus { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module:target { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-workflow-nav a { border: 1px solid var(--ain-border); background: var(--ain-surface-2); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-workflow-nav a > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-workflow-nav small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-workflow-nav a.ain-workflow-ai { background: var(--ain-info-bg); border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-workflow-nav a:hover,
+:root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-workflow-nav a:focus-visible { border-color: var(--ain-border-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-workflow-nav a[aria-disabled="true"] { color: var(--ain-text-muted); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-ai-v2 { border: 2px solid var(--ain-border); border-top: 4px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-ai-v2 > .ain-ai-heading { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-ai-v2 .ain-feature-title { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-ai-v2 .ain-ai-badge { color: var(--ain-text); background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-data-module { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-context { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-diagnosis-v2 > header { border-left: 4px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-management-module > header { border-left: 4px solid var(--ain-border-strong); background: var(--ain-surface-3); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-feature-module.ain-management-module .ain-module-number { color: var(--ain-text-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-module-handoff { border-left: 2px solid var(--ain-border); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-module-handoff p { color: var(--ain-link); }
+
+  /* ---- styles/AnalysisManagementCompact.css ---- */
+  :root[data-theme="dark"] .ain-shell .ain-workbench :is(.ain-diagnosis-module.ain-diagnosis-v2,
+:root[data-theme="dark"] .ain-management-module) { border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench :is(.ain-diagnosis-module.ain-diagnosis-v2,
+:root[data-theme="dark"] .ain-management-module) .ain-module-title h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench :is(.ain-diagnosis-module.ain-diagnosis-v2,
+:root[data-theme="dark"] .ain-management-module) .ain-module-title p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-diagnosis-toolbar-v2 { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 :is(.ain-scope-context,
+:root[data-theme="dark"] .ain-analysis-note) { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-evidence-meta { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-evidence-meta strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-verdict-heading,
+:root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-evidence-metrics > h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-diagnosis-snapshot .ain-diagnosis-overview.is-anomaly { border-left: 2px solid var(--ain-border-strong); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-diagnosis-snapshot .ain-diagnosis-overview.is-normal { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-diagnosis-overview .ain-analysis-observation { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-reason-strip { border-top: 1px solid var(--ain-border); border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-reason-strip > h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-reason-flow .ain-flow-label { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-reason-flow strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-reason-flow li:not(:last-child)::after { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-candidate-tabs .ain-candidate-button { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-candidate-tabs .ain-candidate-button.is-selected { border-color: var(--ain-border); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-cause-card-heading h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-cause-card-heading > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-evidence-group :is(li,
+:root[data-theme="dark"] p) { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-table-scroll { border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-more-evidence { border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-diagnosis-v2 .ain-more-evidence > ul > li p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-management-scope { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-management-column + .ain-management-column { border-left: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-management-column-title h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-group-heading { border-left: 2px solid var(--ain-border-strong); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-suggestion-card { border-color: var(--ain-border); border-left-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-management-muted { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-plan-fieldset { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-plan-fieldset legend { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-plan-form label { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-plan-form :is(input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea) { border-color: var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-current-config strong { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-comparison-table caption { color: var(--ain-link); }
+  @media (max-width: 980px) {
+    :root[data-theme="dark"] .ain-shell .ain-workbench .ain-management-module .ain-management-column + .ain-management-column { border-top: 1px solid var(--ain-border); }
+  }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-diagnosis-reading { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-reason-strip > h3 { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-candidates-v2 { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-candidates-v2 > .ain-cause-card .ain-cause-card-heading { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-evidence-group.ain-support { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-evidence-group.ain-against { background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-evidence-group.ain-missing { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-diagnosis-v2 .ain-prepare-action { border-left: 3px solid var(--ain-border-strong); background: var(--ain-info-bg); }
+
+  /* ---- styles/WorkbenchSplitLayout.css ---- */
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-data-heading .ain-feature-context { background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-data-scene { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-data-meta-count { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-data-meta-details { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-data-meta-details summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ue-comparison-chart { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ue-comparison-chart .ain-slot-heading h2 { color: var(--ain-link); }
+
+  /* ---- pages/workbench/WorkbenchPage.css ---- */
+  :root[data-theme="dark"] .ain-workbench .ain-muted { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workbench-title h1 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workbench-title p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workbench .ain-source-badge { color: var(--ain-text); background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-filter-panel,
+:root[data-theme="dark"] .ain-summary-slot,
+:root[data-theme="dark"] .ain-evidence-slot,
+:root[data-theme="dark"] .ain-chart-slot,
+:root[data-theme="dark"] .ain-management-slot { background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-scope-form label { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-scope-form input,
+:root[data-theme="dark"] .ain-filter-panel .ain-scope-form select { color: var(--ain-text-strong); border-color: var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-filter-note { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-data-bar { color: var(--ain-text); border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-loaded-scope { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-object-bar,
+:root[data-theme="dark"] .ain-ap-focus-bar { border: 1px solid var(--ain-border); background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-object-bar select { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-object-bar strong,
+:root[data-theme="dark"] .ain-ap-focus-bar strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-object-bar p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ap-focus-bar { background: var(--ain-surface-3); border-color: var(--ain-success-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-kpi-card { background: var(--ain-surface-2); border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-kpi-card.ain-kpi-warning { background: var(--ain-warning-bg); border-color: var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-workbench
+  .ain-kpi-card:not(.ain-kpi-warning)
+  .ain-kpi-value { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-slot-heading { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-slot-heading p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workbench .ain-trend-section { border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-section-actions h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-section-actions p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-slot p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-load-state { background: var(--ain-info-bg); border: 1px solid var(--ain-border); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-error { background: var(--ain-error-bg); border: 1px solid var(--ain-error-border); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-preview { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-management-preview h3 { color: var(--ain-text); }
+
+  /* ---- pages/workbench/BackendIntegration.css ---- */
+  :root[data-theme="dark"] .ain-workbench .ain-muted { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workbench-title h1 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workbench-title p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workbench .ain-source-badge { color: var(--ain-text); background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-filter-panel,
+:root[data-theme="dark"] .ain-summary-slot,
+:root[data-theme="dark"] .ain-evidence-slot,
+:root[data-theme="dark"] .ain-chart-slot,
+:root[data-theme="dark"] .ain-management-slot { background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-scope-form label { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-scope-form input,
+:root[data-theme="dark"] .ain-filter-panel .ain-scope-form select { color: var(--ain-text-strong); border-color: var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-filter-note { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-data-bar { color: var(--ain-text); border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-filter-panel .ain-loaded-scope { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-object-bar,
+:root[data-theme="dark"] .ain-ap-focus-bar { border: 1px solid var(--ain-border); background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-object-bar select { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-object-bar strong,
+:root[data-theme="dark"] .ain-ap-focus-bar strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-object-bar p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ap-focus-bar { background: var(--ain-surface-3); border-color: var(--ain-success-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-kpi-card { background: var(--ain-surface-2); border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-kpi-card.ain-kpi-warning { background: var(--ain-warning-bg); border-color: var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-workbench
+  .ain-kpi-card:not(.ain-kpi-warning)
+  .ain-kpi-value { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-slot-heading { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-slot-heading p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workbench .ain-trend-section { border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-section-actions h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-section-actions p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-slot p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-load-state { background: var(--ain-info-bg); border: 1px solid var(--ain-border); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-error { background: var(--ain-error-bg); border: 1px solid var(--ain-error-border); color: var(--ain-text); }
+
+  /* ---- pages/workbench/WorkbenchTabs.css ---- */
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-tabbed-workbench > .ain-workspace-results { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workspace-tabs { border-bottom: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-workspace-tabs > button { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workspace-tabs > button:hover { background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-workspace-tabs > button[aria-selected="true"] { color: var(--ain-link); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workspace-tabs > button:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-workspace-tabs > span { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-tabbed-workbench .ain-workspace-panel.ain-ai-v3 { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workspace-context { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workspace-context > div > span { color: var(--ain-text); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-workspace-context[data-kind="forecast"] > div > span,
+:root[data-theme="dark"] .ain-workspace-context[data-kind="mixed"] > div > span { color: var(--ain-text-strong); background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-workspace-context h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workspace-context small { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-workspace-context .ain-workspace-question { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workspace-context dl { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workspace-context dt { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-workspace-next { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workspace-next > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workspace-panel .ain-forecast-review { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workspace-empty { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-workspace-empty p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-question-time-settings { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-question-time-settings > summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-question-time-settings > summary:hover { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-question-time-settings[open] { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-question-time-settings p { color: var(--ain-link); }
+  @media (max-width: 1024px) {
+    :root[data-theme="dark"] .ain-workspace-mobile-actions { border-bottom: 1px solid var(--ain-border); }
+  }
+
+  /* ---- components/observation/DataObservation.css ---- */
+  :root[data-theme="dark"] .ain-workbench .ain-observation { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation button:focus-visible,
+:root[data-theme="dark"] .ain-workbench .ain-observation select:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-object-controls { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-object-controls p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-tabs { background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-tabs button { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-tabs button[aria-pressed='true'] { color: var(--ain-text); background: var(--ain-surface); border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation select { border: 1px solid var(--ain-border); color: var(--ain-text-strong); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation input[type='checkbox'] { accent-color: var(--ain-accent); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-breadcrumb { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-map { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-map .ain-slot-heading { background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation .ain-observation-map .ain-slot-heading h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-map-controls { background: var(--ain-surface-2); border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-map-options { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-map-notice { color: var(--ain-text); background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-map .ain-spatial-footer { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-panel { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-eyebrow { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-kpi { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-kpi > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-kpi strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-kpi small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-context { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-empty { color: var(--ain-text); background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-connection-detail { background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-details { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-details summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-extra > div { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation th,
+:root[data-theme="dark"] .ain-workbench .ain-observation td { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation td button { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-trends { background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-trend-heading p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-ue-comparison { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-workbench .ain-ue-comparison-heading > p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-ue-comparison-legend { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-ue-comparison-buttons button { border: 1px solid var(--ain-border); background: var(--ain-surface-2); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-ue-comparison-buttons button[aria-pressed='true'] { color: var(--ain-text-strong); background: var(--ain-warning-bg); border-color: var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-workbench .ain-map-explanation { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-map-explanation > summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workbench .ain-observation-detail-body:focus-visible { outline: 2px solid var(--ain-focus); }
+
+  /* ---- replay/ReplayControls.css ---- */
+  :root[data-theme="dark"] .ain-workbench .ain-replay-controls { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-replay-clock > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-clock strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-replay-clock small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-status { color: var(--ain-link); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-replay-status[data-playing='true'] { color: var(--ain-text-strong); background: var(--ain-success-bg); }
+  :root[data-theme="dark"] .ain-replay-actions label { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-actions select { border: 1px solid var(--ain-border); color: var(--ain-text-strong); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-replay-progress span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-progress input { accent-color: var(--ain-accent); }
+  :root[data-theme="dark"] .ain-replay-controls .ain-replay-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-controls :focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-replay-data-info .ain-data-bar { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-history { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-replay-history strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-history-controls { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-speed-hint { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-replay-speed-guide { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-history-controls :focus-visible,
+:root[data-theme="dark"] .ain-reference-controls :focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-history-range-legend { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-history-range-bounds { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-history-range-track { background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-history-range-input::-webkit-slider-thumb { border: 2px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-history-range-input::-moz-range-thumb { border: 2px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-history-range-start::-webkit-slider-thumb { background: var(--ain-surface); border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-history-range-start::-moz-range-thumb { background: var(--ain-surface); border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-workbench .ain-history-range-help { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-reference-controls { background: var(--ain-surface-2); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-reference-row select,
+:root[data-theme="dark"] .ain-reference-row input { border: 1px solid var(--ain-border); color: var(--ain-text-strong); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-reference-controls .ain-reference-hint { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-time-query-note { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-time-guide { border: 1px solid var(--ain-border); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-time-guide strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-time-guide a:focus-visible,
+:root[data-theme="dark"] .ain-time-guide-future-title:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-workbench .ain-time-guide .ain-time-guide-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-time-guide-future { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-time-guide-future-title { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-time-guide-future > p:not(.ain-time-guide-future-title) { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-view-mode { color: var(--ain-link); }
+
+  /* ---- chat/QueryPanel.css ---- */
+  :root[data-theme="dark"] .ain-ai-v3 .ain-forecast-task-mode { border: 1px solid var(--ain-warning-border); background: var(--ain-warning-bg); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-forecast-task-note { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-v3 { border: 1px solid var(--ain-border); border-top: 3px solid var(--ain-border-strong); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-v3 .ain-ai-heading h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-heading p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-status,
+:root[data-theme="dark"] .ain-ai-v3 .ain-ai-column-heading > span { background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-status[data-tone="error"] { background: var(--ain-error-bg); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-status[data-tone="info"] { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-scope { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example-row > strong { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example-row button { border: 1px solid var(--ain-border); background: var(--ain-surface-2); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example-row button:hover:not(:disabled) { color: var(--ain-link); border-color: var(--ain-border); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example-row button > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-input-label { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-composer textarea { border: 1px solid var(--ain-border); background: var(--ain-surface-2); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-input-meta { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-workspace { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-v3 .ain-ai-column-heading h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-ai-v3 h4 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-subheading > span { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-empty,
+:root[data-theme="dark"] .ain-ai-v3 .ain-ai-management-empty p { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-management-empty { border-left: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-analysis-caption { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-result-scope { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-diagnosis-prose.ain-ai-answer { border-left: 3px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-diagnosis-prose h4 { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-diagnosis-prose p,
+:root[data-theme="dark"] .ain-ai-v3 .ain-reply-text p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-tool-reply { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chain-step { background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chain-step.is-warn { border-color: var(--ain-warning-border); background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-livehint { border-left: 3px solid var(--ain-border); background: var(--ain-surface-2); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chain-no { background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chain-step strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chain-step p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-user-question { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-user-question strong { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-pending { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-error,
+:root[data-theme="dark"] .ain-ai-v3 .ain-ai-warning { background: var(--ain-warning-bg); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-error { background: var(--ain-error-bg); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-details { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-details > summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-details[open] { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-candidate-note { border-left: 2px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-details th,
+:root[data-theme="dark"] .ain-ai-v3 .ain-ai-details td { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-evidence { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chart-actions .ain-button[aria-pressed="true"] { color: var(--ain-link); border-color: var(--ain-border); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chart-controls label { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-chart-controls select { color: var(--ain-link); border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-text-button,
+:root[data-theme="dark"] .ain-ai-v3 .ain-ai-adopt-link { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-text-button:disabled,
+:root[data-theme="dark"] .ain-ai-v3 .ain-ai-adopt-link:disabled { color: var(--ain-text-faint); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-v3 .ain-chart-slot { border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-v3 .ain-slot-heading { border-left: 2px solid var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-v3 .ain-echart { background: var(--ain-surface); }
+  @media (max-width: 1000px) {
+    :root[data-theme="dark"] .ain-ai-v3 .ain-ai-management-empty { border-top: 1px solid var(--ain-border); }
+  }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example strong { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-query-example:hover:not(:disabled) { border-color: var(--ain-border); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-diagnosis-column,
+:root[data-theme="dark"] .ain-ai-v3 .ain-management-integrated { border: 1px solid var(--ain-border) !important; background: var(--ain-surface) !important; }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-column-heading { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-column-heading > span[data-state="fault_active"] { background: var(--ain-error-bg); border: 1px solid var(--ain-error-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-column-heading > span[data-state="recovered_in_window"] { background: var(--ain-warning-bg); color: var(--ain-text); border: 1px solid var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-column-heading > span[data-state="performance_warning"] { background: var(--ain-surface-3); color: var(--ain-link); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-column-heading > span[data-state="normal"] { background: var(--ain-surface-3); color: var(--ain-text-strong); border: 1px solid var(--ain-success-border); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-evidence-purpose { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 button:focus-visible,
+:root[data-theme="dark"] .ain-ai-v3 select:focus-visible,
+:root[data-theme="dark"] .ain-ai-v3 textarea:focus-visible,
+:root[data-theme="dark"] .ain-ai-v3 input:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-map-explanation { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-map-explanation > summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert.has-risk { border-color: var(--ain-error-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert > .ain-forecast-alert-icon { background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert.has-risk > .ain-forecast-alert-icon { background: var(--ain-error-bg); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-forecast-alert-body strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-forecast-alert-body span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert.has-risk .ain-forecast-alert-body strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-forecast-pending-note { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-replay-scope > span:last-child { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-example-pending { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-forecast-comparison-note { color: var(--ain-link); }
+
+  /* ---- chat/AnalysisNarrative.css ---- */
+  :root[data-theme="dark"] .ain-ai-v3 .ain-analysis-source { background: var(--ain-surface-3); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-ai-v3 .ain-analysis-paragraph h4 { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-app.ain-shell .ain-ai-v3 .ain-analysis-paragraph .ain-reply-text p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-compact-evidence summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-compact-proof dt { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-compact-proof dd { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-compact-evidence [data-affected="true"] { background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-workspace-context .ain-workspace-events { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-workspace-events > summary { color: var(--ain-link); }
+
+  /* ---- components/analysis/EvidencePanel.css ---- */
+  :root[data-theme="dark"] .ain-result-badge { color: var(--ain-text-strong); background: var(--ain-success-bg); }
+  :root[data-theme="dark"] .ain-analysis-observation { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-analysis-note { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-diagnosis-empty { background: var(--ain-surface-2); border: 1px dashed var(--ain-border); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-diagnosis-overview { border: 1px solid var(--ain-border); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-diagnosis-overview.is-anomaly { background: var(--ain-warning-bg); border-color: var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-diagnosis-overview.is-normal { background: var(--ain-surface-3); border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-diagnosis-overview h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-diagnosis-overview.is-anomaly h3 { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-diagnosis-overview p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-diagnosis-kicker { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-diagnosis-score span { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-diagnosis-score strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-reason-heading p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-reason-flow li { background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-reason-flow li:not(:last-child)::after { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-reason-flow span { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-reason-flow strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-reason-flow p { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-evidence-metric-grid article { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-evidence-metric-grid h4 { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-evidence-metric-grid strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-evidence-metric-grid p,
+:root[data-theme="dark"] .ain-evidence-metric-grid span { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-candidate-button { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-candidate-button span { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-candidate-button:hover { border-color: var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-candidate-button.is-selected { border-color: var(--ain-border-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-cause-card { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-cause-card-heading h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-cause-card-heading span { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-evidence-group { border-left: 3px solid var(--ain-border); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-support { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-support h4 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-against { border-color: var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-against h4 { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-missing { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-missing h4 { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-evidence-heading { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-evidence-heading h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-analysis-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-diagnosis-score { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-reason-heading h3,
+:root[data-theme="dark"] .ain-diagnosis-content .ain-evidence-metrics > h3,
+:root[data-theme="dark"] .ain-diagnosis-content .ain-candidate-list > h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-candidate-button:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-table-scroll { border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-comparison caption { background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-comparison th,
+:root[data-theme="dark"] .ain-diagnosis-content .ain-comparison td { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-comparison thead th { background: var(--ain-info-bg); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-comparison tbody th { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-comparison td { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-comparison tbody tr:nth-child(even) { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-comparison tbody tr[data-affected="true"] { background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-more-evidence { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-more-evidence > summary { color: var(--ain-text); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-more-evidence > summary:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-more-evidence > div { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-more-evidence > div > h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-diagnosis-content .ain-more-evidence > ul > li { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-detail-toggle { color: var(--ain-link); }
+
+  /* ---- components/analysis/ToolResultPanel.css ---- */
+  :root[data-theme="dark"] .ain-workbench .ain-tool-result-v2 { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-tool-result-v2 .ain-tool-heading h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-tool-result-v2 .ain-tool-heading span { color: var(--ain-link); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-tool-result-v2 .ain-tool-scope { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-tool-result-v2 .ain-tool-unsupported { color: var(--ain-text); background: var(--ain-warning-bg); }
+
+  /* ---- components/management/ManagementModule.css ---- */
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-config { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-config-head { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-config-badge { background: var(--ain-surface-3); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-config-badge.is-active { background: var(--ain-success-bg); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-note { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-confirm { border-left: 3px solid var(--ain-warning-border); background: var(--ain-warning-bg); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-ok { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-error { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-history { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-history li strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-compare caption { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-compare th,
+:root[data-theme="dark"] .ain-management-integrated .ain-sim-compare td { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-compare thead th { color: var(--ain-link); border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-compare tbody th { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-compare td.is-up { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-sim-compare td.is-down { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-suggestion-card { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-suggestion-card:hover:not(:disabled) { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-suggestion-card.is-selected { border-color: var(--ain-border-strong); background: var(--ain-surface-3); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-suggestion-card-heading strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-suggestion-card-heading > span,
+:root[data-theme="dark"] .ain-management-integrated .ain-plan-object { color: var(--ain-accent); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-suggestion-text { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-config-summary,
+:root[data-theme="dark"] .ain-management-integrated .ain-effect-summary { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-management-empty { background: var(--ain-surface-2); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-management-muted { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-parameter-table th,
+:root[data-theme="dark"] .ain-management-integrated .ain-parameter-table td { border-bottom: 1px solid var(--ain-border); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-parameter-table thead th { background: var(--ain-surface-2); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-parameter-table th span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-plan-form { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-parameter-field { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-parameter-field small { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-management-integrated input,
+:root[data-theme="dark"] .ain-management-integrated select { border: 1px solid var(--ain-border); color: var(--ain-text); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-management-warning,
+:root[data-theme="dark"] .ain-management-integrated .ain-management-notice { background: var(--ain-warning-bg); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-management-notice { background: var(--ain-surface-3); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-pending { border: 1px dashed var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-pending strong { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-pending p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-manual-tasks { border-left: 2px solid var(--ain-warning-border); background: var(--ain-surface-2); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-conclusion { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-table caption { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-table th,
+:root[data-theme="dark"] .ain-management-integrated .ain-effect-table td { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-table thead th { color: var(--ain-link); border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-table tbody th { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-table td small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-table td.is-up { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-table td.is-down { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-values > div { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-values span,
+:root[data-theme="dark"] .ain-management-integrated .ain-effect-values small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-values strong { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-effect-metric { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-history-baseline { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-management-integrated .ain-parameter-note { color: var(--ain-text-muted); }
+
+  /* ---- components/charts/ChartPanel.css ---- */
+  :root[data-theme="dark"] .ain-kpi-heading > span { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-kpi-card { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-kpi-card.ain-kpi-warning { border-color: var(--ain-warning-border); background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-kpi-label { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-kpi-value { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-kpi-unit { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-kpi-note { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-extra-metrics { border-top: 1px solid var(--ain-border); color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-extra-metrics strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-trend-section { background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-trend-heading p { color: var(--ain-text-muted); }
+
+  /* ---- components/charts/ForecastCompareChart.css ---- */
+  :root[data-theme="dark"] .ain-workbench .ain-forecast-section { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-forecast-section .ain-forecast-heading h2 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-section .ain-forecast-badge { color: var(--ain-link); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-forecast-section .ain-forecast-legend { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-section .ain-forecast-method { border-top: 1px solid var(--ain-border); color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-forecast-section .ain-forecast-method summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-section .ain-forecast-state { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-forecast-section .ain-forecast-error { background: var(--ain-error-bg); }
+
+  /* ---- components/charts/SpatialCharts.css ---- */
+  :root[data-theme="dark"] .ain-spatial-empty { color: var(--ain-text-faint); }
+  :root[data-theme="dark"] .ain-spatial-footer { border-top: 1px solid var(--ain-border); color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-spatial-key .ain-key-ap { border-bottom: 9px solid var(--ain-error-border); }
+  :root[data-theme="dark"] .ain-key-selected { border: 2px solid var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-ap-focus p { color: var(--ain-text); }
+
+  /* ---- forecast/ForecastDialog.css ---- */
+  :root[data-theme="dark"] .ain-forecast-dialog { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-dialog button,
+:root[data-theme="dark"] .ain-forecast-review button { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-dialog button:hover:not(:disabled) { border-color: var(--ain-border-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-forecast-dialog button:focus-visible,
+:root[data-theme="dark"] .ain-forecast-review button:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-forecast-dialog-heading { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-forecast-eyebrow { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-count { background: var(--ain-warning-bg); color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-forecast-sim-tag { background: var(--ain-success-bg); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-dialog-actions button { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-context { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-context strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-context > div > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-demo { border: 1px solid var(--ain-border); background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-risk-tabs button[aria-pressed="true"] { border-color: var(--ain-warning-border); background: var(--ain-warning-bg); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-summary { border: 1px solid var(--ain-warning-border); border-left: 3px solid var(--ain-border-strong); background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-forecast-summary h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-summary > div > span { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-forecast-summary.is-normal { background: var(--ain-surface-3); border-color: var(--ain-success-border); }
+  :root[data-theme="dark"] .ain-forecast-summary.is-normal h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-spectrum,
+:root[data-theme="dark"] .ain-forecast-impact,
+:root[data-theme="dark"] .ain-forecast-chart-empty { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-forecast-spectrum h3,
+:root[data-theme="dark"] .ain-forecast-impact h3,
+:root[data-theme="dark"] .ain-forecast-chart-empty h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-spectrum figcaption p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-spectrum figcaption > span,
+:root[data-theme="dark"] .ain-forecast-impact-heading > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-impact .ain-chart-slot { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-forecast-chart-legend { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-chart-note { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-forecast-chart-empty { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-forecast-chart-empty p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-state { border: 1px dashed var(--ain-border); color: var(--ain-link); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-forecast-state.is-error { background: var(--ain-surface-2); border-color: var(--ain-warning-border); }
+  :root[data-theme="dark"] .ain-forecast-result-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-dialog-footer { border-top: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-forecast-dialog-footer > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-dialog button.ain-forecast-primary { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-forecast-review { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-forecast-review header { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-forecast-review-scope,
+:root[data-theme="dark"] .ain-forecast-review-source { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spectrum-views-heading > h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-spectrum-view-buttons button[aria-pressed="true"] { color: var(--ain-link); background: var(--ain-info-bg); border-color: var(--ain-border); }
+  :root[data-theme="dark"] .ain-spectrum-view-buttons small { color: var(--ain-text-strong); background: var(--ain-warning-bg); }
+  :root[data-theme="dark"] .ain-spectrum-recommendation p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spectrum-unavailable { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-spectrum-curve { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-spectrum-curve h3 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-spectrum-curve figcaption p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spectrum-curve figcaption label { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spectrum-curve select { border: 1px solid var(--ain-border); color: var(--ain-link); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-spectrum-frame-caption { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spectrum-frame-caption[data-kind="history"] { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-spectrum-curve .ain-chart-slot { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-forecast-horizon { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-horizon select { border: 1px solid var(--ain-border); color: var(--ain-text-strong); background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-forecast-review .ain-forecast-brief-note,
+:root[data-theme="dark"] .ain-forecast-plans .ain-forecast-brief-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-details { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-details > summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-details a,
+:root[data-theme="dark"] .ain-forecast-range-row a { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-details > summary:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-forecast-explanation { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-forecast-time-rows dt { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-plans { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-forecast-plans > header span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-plans h4 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-plans h4 small { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-forecast-plans-list label { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-plans-list label.is-selected { border-color: var(--ain-border-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-forecast-plans-list input { accent-color: var(--ain-accent); }
+  :root[data-theme="dark"] .ain-forecast-plans-list small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-param-grid label { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-forecast-param-grid :is(input,
+:root[data-theme="dark"] select) { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-param-grid small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-evaluate-row span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-review .ain-forecast-evaluate-row button { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-forecast-plans-sim { background: var(--ain-info-bg); border: 1px solid var(--ain-border); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-forecast-metrics :is(th,
+:root[data-theme="dark"] td) { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .ain-forecast-metrics thead th { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-forecast-metrics small { color: var(--ain-text-muted); }
+
+  /* ---- forecast/SpatialFrameGrid.css ---- */
+  :root[data-theme="dark"] .ain-forecast-chart-stack .ain-spatial-grid { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-spatial-grid { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-spatial-grid > header h4 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-spatial-grid > header span { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spatial-cover { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-spatial-dim { border: 1px solid var(--ain-border); background: var(--ain-info-bg); color: var(--ain-link) !important; }
+  :root[data-theme="dark"] .ain-spatial-metric { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-spatial-metric select { border: 1px solid var(--ain-border); background: var(--ain-surface); color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-spatial-caption { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spatial-help summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spatial-help summary:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-forecast-spatial-stage { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-spatial-main-canvas { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-spatial-main.is-future .ain-spatial-main-canvas { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-spatial-side { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-spatial-range { accent-color: var(--ain-accent); }
+  :root[data-theme="dark"] .ain-spatial-counter { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spatial-info { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-spatial-info dt { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spatial-info dd { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-spatial-cell { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-spatial-cell:hover { border-color: var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-spatial-cell.is-active { border-color: var(--ain-border-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .ain-spatial-cell.is-active span::after { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spatial-cell-canvas { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .ain-spatial-cell.is-future .ain-spatial-cell-canvas { border-color: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-spatial-cell.is-future span { color: var(--ain-text); }
+  :root[data-theme="dark"] .ain-spatial-cell time { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-spatial-note { color: var(--ain-text-muted); }
+  :root[data-theme="dark"] .ain-spatial-load-state { border: 1px dashed var(--ain-border); background: var(--ain-surface-2); color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-spatial-empty-frame { border: 1px dashed var(--ain-border); background: var(--ain-surface-2); color: var(--ain-link); }
+
+  /* ---- history/HistoryPage.css ---- */
+  :root[data-theme="dark"] .history-page { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .history-heading p,
+:root[data-theme="dark"] .history-muted,
+:root[data-theme="dark"] .history-storage-note { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-toolbar input { border: 1px solid var(--ain-border); background: var(--ain-surface); }
+  :root[data-theme="dark"] .history-toolbar > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-toolbar > button,
+:root[data-theme="dark"] .history-batch-actions button { color: var(--ain-link); background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-batch-actions { background: var(--ain-info-bg); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-batch-actions > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-page input[type="checkbox"] { accent-color: var(--ain-accent); }
+  :root[data-theme="dark"] .history-batch-actions .history-delete-button { border-color: var(--ain-error-border); }
+  :root[data-theme="dark"] .history-card { background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-card.selected { border-color: var(--ain-border-strong); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .history-card time,
+:root[data-theme="dark"] .history-card > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-detail { background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-actions button,
+:root[data-theme="dark"] .history-error button { color: var(--ain-link); background: var(--ain-surface); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-question-heading > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-question-heading p { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-section { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-example .history-question-heading > span { background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .history-plan { border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-plan h4 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .history-plan-source { background: var(--ain-info-bg); color: var(--ain-link); }
+  :root[data-theme="dark"] .history-page summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-page summary:focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .history-plan-guidance dt,
+:root[data-theme="dark"] .history-evaluation-notes dt { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-evaluation-notes { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-evaluations { border-top: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-evaluations h5 { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .history-evaluations h5 > span { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-page .history-version { border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-version > summary { background: var(--ain-surface-2); }
+  :root[data-theme="dark"] .history-version-name { color: var(--ain-text); }
+  :root[data-theme="dark"] .history-version-state { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-version > summary time { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-version-draft .history-version-state,
+:root[data-theme="dark"] .history-version-pending .history-version-state { color: var(--ain-text); }
+  :root[data-theme="dark"] .history-version[open] > summary { border-bottom: 1px solid var(--ain-border); background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .history-parameters dt { color: var(--ain-link); }
+  :root[data-theme="dark"] .history-parameters dd { color: var(--ain-text); }
+  :root[data-theme="dark"] .history-effect th,
+:root[data-theme="dark"] .history-effect td { border-bottom: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .history-effect thead { background: var(--ain-surface-2); color: var(--ain-link); }
+  :root[data-theme="dark"] .history-error { background: var(--ain-warning-bg); border: 1px solid var(--ain-warning-border); color: var(--ain-text); }
+  :root[data-theme="dark"] .history-save-warning { background: var(--ain-warning-bg); color: var(--ain-text-strong); }
+
+  /* ---- pages/home/HomePage.css ---- */
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header { background: var(--ain-surface); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-brand strong { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-brand small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-nav a { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-nav a:hover { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-nav a.active { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-header-status { color: var(--ain-link); }
+  :root[data-theme="dark"] .hp-eyebrow { background: var(--ain-surface); }
+  :root[data-theme="dark"] .hp-eyebrow-dot { background: var(--ain-info-bg); }
+  :root[data-theme="dark"] .hp-btn { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .hp-meta-split { background: var(--ain-surface); }
+  :root[data-theme="dark"] .hp-scene-tab:hover { background: var(--ain-surface); }
+  :root[data-theme="dark"] .hp-scene-tab.is-on { color: var(--ain-text-strong); }
+  :root[data-theme="dark"] .hp-scene-caption { color: var(--ain-text); }
+  :root[data-theme="dark"] .hp-caps { background: var(--ain-surface); }
+  :root[data-theme="dark"] .hp-cap-num { color: var(--ain-text-faint); }
+  :root[data-theme="dark"] .hp-cap-icon { color: var(--ain-link); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .hp-cap-tags span { color: var(--ain-link); background: var(--ain-surface-2); border: 1px solid var(--ain-border); }
+  :root[data-theme="dark"] .hp-cap-guide > summary { color: var(--ain-link); }
+  :root[data-theme="dark"] .hp-guide-content > p { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-home :focus-visible { outline: 2px solid var(--ain-focus); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-footer { background: var(--ain-info-bg); border-top: 1px solid var(--ain-border); color: var(--ain-link); }
+
+  /* ============================================================
+     人工整理区
+     生成规则只处理“单色声明”，渐变、半透明层、语义状态色、首页舞台与 SVG 在这里补齐。
+     ============================================================ */
+
+  /* ---- 页头：半透明磨砂 + 深色描边 ---- */
+  :root[data-theme="dark"] .ain-header {
+    background: rgb(13 23 36 / 88%);
+    border-bottom-color: #1f3247;
+    box-shadow: 0 1px 0 rgb(0 0 0 / 30%);
+    -webkit-backdrop-filter: blur(16px) saturate(130%);
+    backdrop-filter: blur(16px) saturate(130%);
+  }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header {
+    background: rgb(10 18 30 / 78%);
+    border-bottom-color: rgb(120 160 210 / 14%);
+  }
+
+  /* ---- 背景装饰：压到几乎不可见 ---- */
+  :root[data-theme="dark"] .ain-background { color: #3f8fdc; opacity: .05; }
+
+  /* ---- 状态标签：生成规则把语义色压成了中性，这里按 token 还原 ---- */
+  :root[data-theme="dark"] .ain-shell [data-tone="info"] { color: #8fc0ff; background: #122a44; border-color: #255181; }
+  :root[data-theme="dark"] .ain-shell [data-tone="success"] { color: #79d9b0; background: #122c24; border-color: #2c6b55; }
+  :root[data-theme="dark"] .ain-shell [data-tone="warning"] { color: #f0c079; background: #3a2a12; border-color: #7a5a24; }
+  :root[data-theme="dark"] .ain-shell [data-tone="error"] { color: #f2a2a0; background: #3a1a1a; border-color: #7d3b3b; }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-status[data-tone="error"] { color: #f2a2a0; background: #3a1a1a; border-color: #7d3b3b; }
+  :root[data-theme="dark"] .ain-ai-v3 .ain-ai-status[data-tone="info"] { color: #8fc0ff; background: #122a44; }
+
+  /* ---- 弹窗与浮层 ---- */
+  :root[data-theme="dark"] .ain-forecast-overlay { background: var(--ain-overlay); }
+  :root[data-theme="dark"] .ain-forecast-dialog { box-shadow: 0 28px 90px rgb(0 0 0 / 62%); }
+  :root[data-theme="dark"] .ain-forecast-dialog-footer { background: #0f1a27; border-top-color: var(--ain-border); }
+
+  /* ---- 表单占位符与滚动条 ---- */
+  :root[data-theme="dark"] input::placeholder,
+  :root[data-theme="dark"] textarea::placeholder { color: var(--ain-text-faint); }
+  :root[data-theme="dark"] * { scrollbar-color: var(--ain-scrollbar) transparent; }
+  :root[data-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--ain-scrollbar); border-radius: 6px; }
+
+  /* ---- 首页首屏舞台：浅蓝渐变 → 夜蓝渐变，场景轻微压亮 ---- */
+  :root[data-theme="dark"] .hp-hero-panel {
+    background: linear-gradient(158deg, #20497e 0%, #1a3c68 34%, #142f52 56%, #10243c 76%, #0c1727 94%);
+  }
+  :root[data-theme="dark"] .hp-hero-panel::before {
+    background:
+      radial-gradient(720px 540px at 18% 44%, rgba(8, 22, 52, .55) 0%, rgba(8, 22, 52, .3) 54%, rgba(8, 22, 52, 0) 78%),
+      linear-gradient(96deg, rgba(6, 16, 38, .45) 0%, rgba(6, 16, 38, .16) 34%, rgba(6, 16, 38, 0) 52%);
+  }
+  :root[data-theme="dark"] .hp-hero-panel::after {
+    background: linear-gradient(185deg, rgba(4, 12, 26, 0) 40%, rgba(4, 12, 26, .55) 100%);
+  }
+  :root[data-theme="dark"] .hp-hero-veil {
+    background: linear-gradient(180deg, rgba(10, 18, 30, 0) 60%, rgba(10, 18, 30, .6) 86%, rgba(10, 18, 30, .94) 100%);
+  }
+  :root[data-theme="dark"] .hp-hero::after {
+    background: linear-gradient(180deg, rgba(10, 18, 30, 0) 0%, rgba(10, 18, 30, .55) 62%, #0a121e 100%);
+  }
+  :root[data-theme="dark"] .hp-hero-sweep {
+    background: linear-gradient(102deg, transparent 38%, rgba(255, 255, 255, .16) 48%, transparent 58%);
+  }
+  /* 场景本身是浅色 3D 插画：整体压亮，避免在夜色底上刺眼。 */
+  :root[data-theme="dark"] .hp-hero-scene svg { filter: saturate(.9) brightness(.82); }
+
+  /* 首屏底色与两处浅色渐变按钮：生成规则只换单色，渐变必须手写。 */
+  :root[data-theme="dark"] .hp-hero {
+    background:
+      radial-gradient(900px 620px at 92% 0%, rgba(80, 140, 230, .18) 0%, rgba(80, 140, 230, 0) 62%),
+      linear-gradient(180deg, #0d1826 0%, #0b1521 60%, #0a121e 100%);
+  }
+  :root[data-theme="dark"] .hp-btn {
+    color: #eaf2ff;
+    background: linear-gradient(180deg, #2a5fb8 0%, #1c4382 100%);
+    box-shadow: 0 14px 30px rgb(0 0 0 / 45%), inset 0 1px 0 rgb(255 255 255 / 16%);
+  }
+  :root[data-theme="dark"] .hp-btn:hover {
+    color: #fff;
+    background: linear-gradient(180deg, #326fc8 0%, #24508f 100%);
+  }
+  :root[data-theme="dark"] .hp-scene-tab.is-on {
+    color: #eaf2ff;
+    background: linear-gradient(180deg, #1e3c63, #152c49);
+    box-shadow: 0 10px 22px rgb(0 0 0 / 45%);
+  }
+  :root[data-theme="dark"] .hp-scene-tab.is-on:hover {
+    background: linear-gradient(180deg, #244a77, #1a3352);
+  }
+  :root[data-theme="dark"] .hp-hero-meta { color: #b7c9df; }
+  :root[data-theme="dark"] .hp-scene-caption { color: #a9bcd2; }
+  /* 频谱 SVG 文字（浅色为 #59728f）。 */
+  :root[data-theme="dark"] .ain-forecast-spectrum svg text { fill: #93a8bd; }
+
+  /* ---- 频谱 SVG（改成类名后由这里上色） ---- */
+  :root[data-theme="dark"] .ain-spectrum-plot { fill: #14202e; }
+  :root[data-theme="dark"] .ain-spectrum-frame { stroke: #2b425b; }
+  :root[data-theme="dark"] .ain-spectrum-base { stroke: var(--ain-border-strong); }
+  :root[data-theme="dark"] .ain-spectrum-tick { stroke: #35506b; }
+  :root[data-theme="dark"] .ain-spectrum-missing { fill: #22344a; }
+}

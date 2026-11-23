@@ -7,15 +7,16 @@
   position: relative;
   isolation: isolate;
   min-height: 100vh;
-  color: #183153;
+  color: var(--ain-text-strong);
   font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+  /* 背景走主题变量：浅色与原先完全一致，深色换成夜色底 + 暗蓝光晕。 */
   background:
     radial-gradient(
       ellipse at top right,
-      #e4f3ff 0,
+      var(--ain-bg-glow) 0,
       transparent 48%
     ),
-    #edf5fc;
+    var(--ain-bg-page);
   line-height: 1.5;
 }
 

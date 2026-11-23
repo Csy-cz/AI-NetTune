@@ -36,6 +36,9 @@
 .ain-app.ain-shell .ain-workspace-panel.ain-ai-v3 .ain-ai-column-heading { margin-bottom: 6px; padding-bottom: 0; border-bottom: 0; }
 .ain-workspace-panel .ain-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .ain-workspace-panel .ain-management-module { margin: 0; }
+/* 方案效果（用户要求）：内容按阅读宽度收窄并左对齐，避免少量内容被拉满整宽；
+   上方上下文条与底部导航仍占满整宽。窗口更窄时自动回落为满宽。 */
+.ain-app.ain-shell .ain-tabbed-workbench #ain-panel-plans .ain-management-integrated { max-width: 900px; }
 .ain-workspace-panel .ain-forecast-review { background: #fff; margin: 0; padding: 0; border: 0; }
 .ain-workspace-panel .ain-forecast-plans { border: 0; padding-top: 0; margin-top: 0; }
 .ain-workspace-panel .ain-forecast-plans-list { grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); }
@@ -46,10 +49,13 @@
 .ain-workspace-empty { max-width: 560px; margin: clamp(12px, 4vw, 56px) auto; padding: clamp(16px, 4vw, 32px); text-align: center; border: 1px solid #d8e5f4; border-radius: 10px; background: #f7faff; }
 .ain-workspace-empty p { margin: 8px 0 16px; line-height: 1.65; color: #496681; }
 .ain-workspace-empty .ain-button { min-height: 44px; }
-.ain-question-time-settings, .ain-question-tools { margin: 8px 0; font-size: 11px; color: #7088a2; }
-.ain-question-time-settings > summary, .ain-question-tools > summary { cursor: pointer; color: #3f75ad; padding: 3px 0; }
-.ain-question-tools .ain-query-footer { display: flex; flex-wrap: wrap; gap: 7px; }
-.ain-question-tools .ain-report-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+/* 提问说明：放在助手卡片最下方，默认收起；展开后为一个浅底小框，字体与面板正文一致。 */
+.ain-question-time-settings { margin: 10px 0 2px; font-size: 12.5px; color: #64809c; }
+.ain-question-time-settings > summary { cursor: pointer; color: #3a6fa8; padding: 3px 0; font-size: 12.5px; }
+.ain-question-time-settings > summary:hover { color: #1f5a99; }
+.ain-question-time-settings[open] { padding: 8px 10px 9px; border: 1px solid #e1ebf6; border-radius: 8px; background: #fafcff; }
+.ain-question-time-settings[open] > summary { padding-top: 0; }
+.ain-question-time-settings p { margin: 6px 0 0; line-height: 1.6; color: #55708c; }
 .ain-app.ain-shell .ain-tabbed-workbench .ain-query-example span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .ain-app.ain-shell .ain-tabbed-workbench .ain-question-time-settings .ain-time-guide { display: block; }
 .ain-app.ain-shell .ain-tabbed-workbench .ain-question-time-settings .ain-reference-hint { display: block; }

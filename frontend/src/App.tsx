@@ -9,6 +9,8 @@ import WorkbenchPage from "./pages/workbench/WorkbenchPage";
 import "./App.css";
 // 工作台左右分栏（数据左 / AI右）；最后导入以统一各组件的布局覆盖。
 import "./styles/WorkbenchSplitLayout.css";
+// 深色主题覆盖表：必须最后导入，保证与既有规则同特异性时后写生效。
+import "./styles/theme-dark.css";
 
 export default function App() {
   const workbenchActive = useMatch("/workbench") !== null;

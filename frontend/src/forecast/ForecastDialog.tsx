@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { ReplyText } from "../chat/DiagnosisAnswer";
 import ChartPanel from "../components/charts/ChartPanel";
+import { useChartPalette } from "../theme/chartPalette";
 import SpectrumViewPanel from "./SpectrumViewPanel";
 import SpatialFrameGrid from "./SpatialFrameGrid";
 import { forecastTrendOption } from "./charts";
@@ -36,6 +37,7 @@ export default function ForecastDialog({ request, result, pending, error, onClos
   const scopedAlerts = (result?.alerts ?? []).filter(a => !request.targetWindow
     || (a.start <= request.targetWindow.end && a.end > request.targetWindow.start));
   const alert = scopedAlerts.find(a => a.id === selected) ?? scopedAlerts[0];
+  const chartPalette = useChartPalette();
   const linkedImpact = alert ? result?.impacts.find(s => s.id === alert.impactId) : undefined;
   const globalImpacts = result?.integrationNotice ? result.impacts.filter(s => s.targetLabel === "全网") : [];
   const globalImpact = globalImpacts.find(s => s.id === globalMetric) ?? globalImpacts[0];
@@ -47,7 +49,7 @@ export default function ForecastDialog({ request, result, pending, error, onClos
   // 用区块禁用而不是 disable-next-line：该规则报在依赖数组那一行，不在 const 声明行。
   /* eslint-disable react-hooks/preserve-manual-memoization -- 依赖对象不会被就地 mutate，见上 */
   const trend = useMemo(() => result && impact && [...impact.history, ...impact.predicted].some(p => p.value !== null)
-    ? forecastTrendOption(result, impact) : null, [result, impact]);
+    ? forecastTrendOption(result, impact, chartPalette) : null, [result, impact, chartPalette]);
   /* eslint-enable react-hooks/preserve-manual-memoization */
   const demo = result?.source === "demo";
   const noRiskToReview = Boolean(result && (request.targetWindow || result.integrationNotice) && !scopedAlerts.length);

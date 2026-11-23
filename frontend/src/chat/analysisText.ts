@@ -37,3 +37,22 @@ export function withoutQuestionEcho(reply: string, question?: string): string {
   if (rest && !/^[ \t]*\r?\n/.test(rest)) return reply;
   return `${source.trim()}${rest.trimStart()}`;
 }
+
+/** 段落是否为大模型写的【预计效果】段（允许加粗/方括号/冒号三种写法）。 */
+const isPlanEffectBlock = (paragraph: string) =>
+  /^(?:\*\*)?【预计效果】/.test(paragraph) || /^(?:\*\*)?预计效果(?:\*\*)?[：:]/.test(paragraph);
+
+/**
+ * 去掉回答里的【预计效果】段落：仿真对比已在「方案效果」页用图表展示，
+ * 研判正文不再重复这段文字。只影响展示，归档与接口原文不动；
+ * 若某节内容被删空，整节一并去掉，避免出现空标题。
+ */
+export function withoutPlanEffectSections(sections: AnalysisSection[]): AnalysisSection[] {
+  return sections
+    .map(section => ({
+      ...section,
+      text: section.text.split(/\n\s*\n/).map(paragraph => paragraph.trim())
+        .filter(paragraph => paragraph && !isPlanEffectBlock(paragraph)).join("\n\n"),
+    }))
+    .filter(section => section.text.trim());
+}

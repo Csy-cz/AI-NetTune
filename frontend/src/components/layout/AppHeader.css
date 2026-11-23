@@ -15,9 +15,10 @@
   margin: 0 auto;
   padding: 8px 24px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  /* 品牌 | 导航 | 主题开关 | 状态 */
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
   align-items: center;
-  gap: 24px;
+  gap: 18px;
 }
 
 .ain-header .ain-brand {
@@ -149,7 +150,7 @@
 
 @media (max-width: 1000px) {
   .ain-header-inner {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     gap: 6px 16px;
   }
   .ain-header .ain-header-status {
@@ -166,14 +167,26 @@
 
 @media (max-width: 700px) {
   .ain-header-inner {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 6px;
     padding: 8px 12px;
+  }
+  /* 显式排布：品牌 | 主题开关 第一行，导航与状态各占整行。 */
+  .ain-header .ain-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .ain-header .ain-theme-toggle {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
   }
   .ain-header .ain-brand strong {
     font-size: 20px;
   }
   .ain-header .ain-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
     width: 100%;
     justify-self: stretch;
     gap: 4px;
@@ -182,6 +195,19 @@
     flex: 1;
     padding: 7px 4px;
     font-size: 12px;
+  }
+  .ain-header .ain-header-status {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+  /* 触控目标不小于 40px。 */
+  .ain-header .ain-theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+  .ain-header .ain-theme-toggle svg {
+    width: 19px;
+    height: 19px;
   }
 }
 

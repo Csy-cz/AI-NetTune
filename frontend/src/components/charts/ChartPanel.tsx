@@ -1,4 +1,4 @@
-/* eslint-disable react-refresh/only-export-components -- 共用图表组件沿用统一导出的轴样式常量。 */
+/* 图表基础组件：ECharts 注册、公共面板与轴样式转出。 */
 import { useEffect, useRef, type CSSProperties } from "react";
 import * as echarts from "echarts/core";
 import { BarChart, LineChart, HeatmapChart, GraphChart } from "echarts/charts";
@@ -87,18 +87,6 @@ export default function ChartPanel({
     </figure>
   );
 }
-// 第二批：统一图表字体，分别提供深色画布与白底画布的轴样式。
-export const CHART_FONT = '"Microsoft YaHei", "PingFang SC", Arial, sans-serif';
-export const AXIS_STYLE = {
-  axisLine: { lineStyle: { color: "#4b6383" } },
-  axisTick: { show: false },
-  axisLabel: { color: "#c3d5ee", fontSize: 11, fontFamily: CHART_FONT },
-  splitLine: { lineStyle: { color: "#293b55", width: 1 } },
-};
-export const LIGHT_AXIS_STYLE = {
-  axisLine: { lineStyle: { color: "#bfd4ed" } },
-  axisTick: { show: false },
-  axisLabel: { color: "#47658e", fontSize: 11, fontFamily: CHART_FONT },
-  splitLine: { lineStyle: { color: "#e8f0fa", width: 1 } },
-};
-export const CHART_BACKGROUND = "#102036";
+// 第二批：统一图表字体与轴样式。颜色改为从 theme/chartPalette 出（深浅两套），
+// 这里只做转出，保持既有 `from "../charts/ChartPanel"` 的引用不变。
+export { CHART_FONT, AXIS_STYLE, LIGHT_AXIS_STYLE, CHART_BACKGROUND } from "../../theme/chartPalette";

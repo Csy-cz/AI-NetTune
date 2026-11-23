@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import logoUrl from "../../assets/logo.svg";
+import ThemeToggle from "./ThemeToggle";
 import "./AppHeader.css";
 
 const navigation = [
@@ -34,6 +35,8 @@ export default function AppHeader() {
             </NavLink>
           ))}
         </nav>
+
+        <ThemeToggle />
 
         <span className="ain-header-status">
           <i aria-hidden="true" />

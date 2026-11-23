@@ -119,22 +119,6 @@
 .ain-ai-v3 .ain-ai-signal-key { display: flex; flex-wrap: wrap; gap: 3px 9px; margin-bottom: 5px; }
 .ain-ai-v3 .ain-ai-signal-key span { display: inline-flex; align-items: center; gap: 4px; }
 .ain-ai-v3 .ain-ai-signal-key i { width: 8px; height: 8px; border-radius: 2px; }
-/* 记录列表与导出按钮原来是同一行 flex：列表被按钮挤成窄条、卡片内部还出现滚动。
-   改成**块级堆叠**：记录占满整宽，按钮另起一行。 */
-.ain-ai-v3 .ain-query-footer { display: block; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e6edf6; }
-.ain-ai-v3 .ain-query-history-details { display: block; width: 100%; flex: none; min-width: 0; color: #4d6d8f; font-size: 12px; }
-.ain-ai-v3 .ain-query-footer .ain-report-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px; }
-.ain-ai-v3 .ain-query-history-details > summary { cursor: pointer; }
-.ain-ai-v3 .ain-query-history-details > summary span { margin-left: 5px; color: #8a9caf; }
-.ain-ai-v3 .ain-query-history { max-height: 260px; overflow: auto; margin-top: 8px; display: block; }
-/* 记录卡片必须占满整块宽度（实测在窄容器里会被挤成窄条并出现内部滚动）：
-   显式声明 block + 100% 宽度 + 不裁剪，覆盖任何继承来的 flex/inline 布局。 */
-.ain-ai-v3 .ain-query-history > .ain-query-record { display: block; width: 100%; box-sizing: border-box;
-  max-height: none; overflow: visible; }
-.ain-ai-v3 .ain-query-record { padding: 10px; margin-bottom: 7px; border: 1px solid #e0eaf5; border-radius: 7px; background: #fafcff; }
-.ain-ai-v3 .ain-query-record.is-error { background: #fff8f7; }
-.ain-ai-v3 .ain-query-record-meta { display: flex; align-items: start; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
-.ain-ai-v3 .ain-query-record-meta time { flex-shrink: 0; color: #7c8fa5; font-size: 11px; }
 @media (max-width: 1000px) {
   .ain-ai-v3 .ain-ai-workspace { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .ain-ai-v3 .ain-ai-management-empty { padding: 12px 0 0; border-left: 0; border-top: 1px solid #e6edf6; }
@@ -196,7 +180,6 @@
 .ain-ai-v3 .ain-ai-chart-controls { gap: 5px 8px; margin-bottom: 6px; }
 .ain-ai-v3 .ain-ai-details { margin: 5px 0; font-size: 11px; }
 .ain-ai-v3 .ain-candidate-note { padding: 5px 8px; margin-top: 5px; }
-.ain-ai-v3 .ain-query-footer { margin-top: 9px; padding-top: 7px; }
 .ain-ai-v3 button:focus-visible, .ain-ai-v3 select:focus-visible, .ain-ai-v3 textarea:focus-visible, .ain-ai-v3 input:focus-visible { outline: 2px solid #629de6; outline-offset: 2px; }
 @media (max-width: 1050px) { .ain-ai-v3 .ain-query-example { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
 @media (max-width: 850px) { .ain-ai-v3 .ain-ai-workspace { grid-template-columns: minmax(0, 1fr); } .ain-ai-v3 .ain-query-examples { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -211,14 +194,63 @@
 .ain-ai-v3 .ain-map-explanation > summary { cursor: pointer; color: #3c79b2; }
 .ain-ai-v3 .ain-map-explanation p { margin-top: 3px; line-height: 1.5; }
 .ain-ai-v3 .ain-ai-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-.ain-ai-v3 .ain-forecast-placeholder { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid #d4e2f3; border-radius: 6px; background: #f4f8fd; color: #627b96; font: inherit; font-size: 11px; cursor: default; }
-.ain-ai-v3 .ain-forecast-placeholder span { font-size: 10px; color: #8596aa; }
+/* 预测预警告警面板（用户要求）：放在「AI 网络助手」卡片上方的独立条，宽度＝整个右栏，
+   比原先卡片内缩进时更宽；普通状态浅蓝、检出风险转红系；窄屏换行并让按钮占整行。 */
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert { display: flex; flex: 0 0 auto; align-items: center; gap: 8px;
+  padding: 7px 10px; border: 1px solid #d7e5f5; border-radius: 10px; background: #f5f9ff; box-sizing: border-box; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert.has-risk { border-color: #e7b6b9; background: #fff5f5; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert > .ain-forecast-alert-icon {
+  display: grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px;
+  border-radius: 6px; background: #e6f0fc; color: #2e73b9; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert.has-risk > .ain-forecast-alert-icon { background: #fbe4e5; color: #b42328; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-forecast-risk-icon { width: 15px; height: 15px; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-forecast-radar-icon { width: 17px; height: 17px; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert > .ain-forecast-alert-body { display: grid; flex: 1 1 auto; gap: 1px; min-width: 0; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-forecast-alert-body strong { color: #24537f; font-size: 12px; font-weight: 600; line-height: 1.4; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-forecast-alert-body span { color: #6b8399; font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert.has-risk .ain-forecast-alert-body strong { color: #a4292f; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert.has-risk .ain-forecast-alert-body span { color: #a04a4e; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-button { flex: 0 0 auto; font-size: 11px; padding: 4px 9px; }
+.ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-button:disabled { opacity: .55; }
+.ain-ai-v3 .ain-forecast-task-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+@media (max-width: 640px) {
+  .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert { flex-wrap: wrap; }
+  .ain-app.ain-shell .ain-workbench .ain-ai-side .ain-forecast-alert .ain-button { width: 100%; }
+}
 .ain-ai-v3 .ain-forecast-pending-note { margin: 0 0 4px; font-size: 10px; color: #8294a9; }
 .ain-ai-v3 .ain-ai-replay-scope { display: flex; flex-wrap: wrap; gap: 3px 15px; }
 .ain-ai-v3 .ain-ai-replay-scope > span:last-child { color: #41749e; }
 .ain-ai-v3 .ain-example-pending { display: inline-block; font-size: 9px; color: #8596aa; margin-left: 5px; }
 
-.ain-ai-replay-scope .ain-button { margin-left: auto; padding: 4px 9px; font-size: 11px; }
+.ain-ai-replay-scope .ain-button { margin-left: auto; padding: 4px 9px; font-size: 12px; }
 .ain-forecast-comparison-note { color: #6b8399; font-size: 11px; margin: 0 0 7px; }
 .ain-forecast-comparison-note summary { cursor: pointer; }
 .ain-forecast-comparison-note p { margin: 4px 0; line-height: 1.5; }
+
+/* ===== 可读性：助手面板整体字号加大一档 =====
+   右栏卡片只有 320~430px 宽，原 10~11px 的正文在 1080p/1440p 上偏小；
+   统一为：正文 12.5~13px、次要信息 11.5~12px、输入框 13.5px。 */
+.ain-ai-v3 .ain-ai-heading p { font-size: 12.5px; }
+.ain-ai-v3 .ain-ai-heading .ain-ai-status { font-size: 12px; }
+.ain-ai-v3 .ain-ai-scope { font-size: 12.5px; }
+.ain-ai-v3 .ain-query-example strong, .ain-ai-v3 .ain-query-example span { font-size: 12.5px; }
+.ain-ai-v3 .ain-input-label { font-size: 12.5px; }
+.ain-ai-v3 .ain-query-composer textarea { font-size: 13.5px; }
+.ain-ai-v3 .ain-query-input-meta { font-size: 11.5px; }
+.ain-ai-v3 .ain-query-livehint { font-size: 12.5px; }
+.ain-ai-v3 .ain-ai-note { font-size: 12.5px; }
+.ain-ai-v3 .ain-ai-details { font-size: 12px; }
+.ain-ai-v3 .ain-diagnosis-prose p, .ain-ai-v3 .ain-reply-text p { font-size: 13px; }
+.ain-ai-v3 .ain-ai-result-scope { font-size: 11.5px; }
+.ain-ai-v3 .ain-ai-user-question { font-size: 12.5px; }
+.ain-ai-v3 .ain-ai-column-heading > span { font-size: 11px; }
+.ain-ai-v3 .ain-example-pending { font-size: 10px; }
+
+/* 参考范围条：紧贴主时钟之前，和主时钟同属“时间基准”设置。
+   紧凑布局默认隐藏 .ain-reference-hint（数据区提示太多），这里是唯一需要看到提示的位置。 */
+.ain-app.ain-shell .ain-workbench .ain-ai-v3 > .ain-reference-controls { margin: 8px 0 3px; padding: 7px 10px; font-size: 12.5px; }
+.ain-app.ain-shell .ain-workbench .ain-ai-v3 > .ain-reference-controls .ain-reference-actual { flex-basis: 100%; font-size: 12px; }
+.ain-app.ain-shell .ain-workbench .ain-ai-v3 > .ain-reference-controls .ain-reference-hint { display: block; margin: 2px 0 0; font-size: 11.5px; line-height: 1.55; }
+.ain-app.ain-shell .ain-workbench .ain-ai-v3 > .ain-reference-controls .ain-reference-custom { gap: 6px; font-size: 12px; }
+/* 参考范围与主时钟之间的分隔由参考条自身的留白承担，不再额外加间距。 */
+.ain-app.ain-shell .ain-workbench .ain-ai-v3 > .ain-ai-replay-scope { margin: 4px 0 8px; }

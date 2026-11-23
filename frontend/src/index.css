@@ -1,7 +1,8 @@
 :root {
   font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
-  color: #183153;
-  background: #edf5fc;
+  /* 颜色改走主题变量（styles/theme.css）：浅色值与原先一致，深色由 data-theme 覆盖。 */
+  color: var(--ain-text-strong);
+  background: var(--ain-bg-page);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -53,7 +54,7 @@ select:focus-visible,
 textarea:focus-visible,
 a:focus-visible,
 summary:focus-visible {
-  outline: 2px solid #176dff;
+  outline: 2px solid var(--ain-focus);
   outline-offset: 3px;
 }
 

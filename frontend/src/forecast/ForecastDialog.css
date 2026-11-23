@@ -42,6 +42,12 @@
 .ain-forecast-spectrum svg { display: block; width: 100%; height: clamp(200px, 22vw, 280px); margin-top: 4px; }
 .ain-forecast-spectrum svg text { font-size: 10px; fill: #59728f; }
 .ain-forecast-spectrum svg rect > title { white-space: pre-line; }
+/* 频谱 SVG 的底色/网格/基准线/缺失块：浅色取值，深色在 theme-dark.css 覆盖 */
+.ain-forecast-spectrum .ain-spectrum-plot { fill: #f1f5fa; }
+.ain-forecast-spectrum .ain-spectrum-frame { stroke: #d2dceb; }
+.ain-forecast-spectrum .ain-spectrum-base { stroke: #fff; }
+.ain-forecast-spectrum .ain-spectrum-tick { stroke: #abc1d9; }
+.ain-forecast-spectrum .ain-spectrum-missing { fill: #e8edf4; }
 .ain-forecast-impact .ain-chart-slot { border: 0; box-shadow: none; margin: 0; background: #fff; }
 .ain-forecast-impact .ain-slot-heading { display: none; }
 .ain-forecast-impact .ain-echart { width: 100%; height: 144px !important; margin: 0; }
@@ -60,9 +66,6 @@
 .ain-forecast-dialog-footer > div { display: flex; gap: 7px; }
 .ain-forecast-dialog button.ain-forecast-primary { color: #fff; background: #2378ec; border-color: #2378ec; }
 .ain-forecast-dialog button.ain-forecast-primary:hover:not(:disabled) { background: #1767d1; }
-.ain-forecast-trigger { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #bed8f8; border-radius: 6px; padding: 5px 8px; color: #2e73b9; background: #f0f7ff; font-size: 11px; cursor: pointer; }
-.ain-forecast-trigger span { font-size: 10px; color: #7c91aa; }
-.ain-forecast-trigger:disabled { opacity: .5; cursor: not-allowed; }
 .ain-forecast-review { padding: 10px; border: 1px solid #c7dcf6; background: #f7fbff; border-radius: 7px; margin: 5px 0 12px; }
 .ain-forecast-review header { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; color: #2c649c; }
 .ain-forecast-review header > span { font-size: 11px; }
@@ -174,8 +177,5 @@
   .ain-forecast-summary h3 { overflow-wrap: anywhere; }
 }
 
-/* 只表示最近已查询结果中存在风险；具体基准可悬停查看。 */
-.ain-forecast-trigger.has-risk { color: #b42328; border-color: #e49a9e; background: #fff1f2; font-weight: 600; }
-.ain-forecast-trigger.has-risk span { color: #a83b40; }
-.ain-forecast-trigger.has-risk:hover:not(:disabled) { background: #ffe5e7; border-color: #ce5a63; }
+/* 风险图标：新告警面板与预测弹窗共用（原标题行触发按钮已移到助手顶部告警面板）。 */
 .ain-forecast-risk-icon { width: 15px; height: 15px; flex-shrink: 0; }

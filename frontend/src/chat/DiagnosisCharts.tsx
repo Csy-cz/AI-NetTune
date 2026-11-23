@@ -6,7 +6,8 @@ import { binObservationTrend, latestObservationLinks, observationTrend, observat
 import type { ObservationTarget } from "../services/dataObservation";
 import { displayMetric } from "../services/metrics";
 import { getSpatialArea } from "../services/spatialMap";
-import ChartPanel, { CHART_FONT, LIGHT_AXIS_STYLE } from "../components/charts/ChartPanel";
+import ChartPanel, { CHART_FONT } from "../components/charts/ChartPanel";
+import { useChartPalette } from "../theme/chartPalette";
 import SpatialChart, { createProjection, SceneAxes, SceneNode, SCENE_VIEWBOX } from "../components/charts/SpatialChart";
 import ToolResultPanel from "../components/analysis/ToolResultPanel";
 import { diagnosisMetric, sameQueryScope } from "./diagnosisModel";
@@ -81,6 +82,8 @@ export default function DiagnosisCharts({ data, diagnosis, toolResult, spatial, 
   onTool: (type: "heatmap" | "topology") => void; selection?: EvidenceSelection | null;
 }) {
   const evidenceRef = useRef<HTMLElement>(null);
+  // 图表画布/轴/提示框颜色随主题切换（深色下白底画布会变成深底）。
+  const palette = useChartPalette();
   const userSubject = userResult?.subject;
   const selectionId = selection?.id;
   useEffect(() => {
@@ -110,19 +113,19 @@ export default function DiagnosisCharts({ data, diagnosis, toolResult, spatial, 
     ? diagnosis?.evidence.find(item => item.metric === RAW_METRICS[metric])?.threshold : undefined;
   const hasThreshold = Number.isFinite(threshold);
   const option: EChartsOption = {
-    animation: false, backgroundColor: "#fff", textStyle: { fontFamily: CHART_FONT },
+    animation: false, backgroundColor: palette.canvas, textStyle: { fontFamily: CHART_FONT },
     // containLabel 在 ECharts 6 已弃用（老算法只按样本标签估算留白），
     // 换成等价的新机制；contain: 'all' 还会把**轴名**（如 Mbps）一起兜住 ——
     // 正是这张图的 x 轴单位被卡片右边缘裁成 "MI" 的原因。
     grid: { left: 8, right: 14, top: 26, bottom: 8, outerBoundsMode: "same", outerBoundsContain: "all" },
-    tooltip: { trigger: "axis", renderMode: "richText", formatter: (params: unknown) => {
+    tooltip: { trigger: "axis", renderMode: "richText", ...palette.tooltip, formatter: (params: unknown) => {
       const first = (Array.isArray(params) ? params[0] : params) as { dataIndex?: number } | undefined;
       const point = points[first?.dataIndex ?? -1];
       return point ? `${clock.format(point.time)}（北京时间）\n${targetLabel(target)} · ${meta.label}：${displayMetric(point.value ?? undefined)} ${meta.unit}${hasThreshold ? `\n后端阈值：${displayMetric(threshold)} ${meta.unit}` : ""}` : "暂无有效采样";
     } },
-    xAxis: { ...LIGHT_AXIS_STYLE, type: "time", splitNumber: 4, axisLabel: { ...LIGHT_AXIS_STYLE.axisLabel,
+    xAxis: { ...palette.axis, type: "time", splitNumber: 4, axisLabel: { ...palette.axis.axisLabel,
       formatter: (value: number) => clock.format(value), hideOverlap: true } },
-    yAxis: { ...LIGHT_AXIS_STYLE, type: "value", scale: true, name: meta.unit, nameTextStyle: { color: "#627a94" }, splitNumber: 3 },
+    yAxis: { ...palette.axis, type: "value", scale: true, name: meta.unit, nameTextStyle: { color: palette.axisName }, splitNumber: 3 },
     series: [{ type: "line", name: meta.label, connectNulls: false, showSymbol: points.length < 40, symbolSize: 4,
       lineStyle: { color: "#367deb", width: 2 }, itemStyle: { color: "#367deb" }, data: points.map(point => [point.time, point.value]) },
       ...(hasThreshold ? [{ type: "line" as const, name: "后端阈值", showSymbol: false, silent: true,
@@ -136,11 +139,12 @@ export default function DiagnosisCharts({ data, diagnosis, toolResult, spatial, 
   const visibleComparisons = ordered.slice(0, 10);
   const focused = target.kind !== "all" && target.kind === compareKind ? ordered.find(item => item.id === target.id) : null;
   if (focused && !visibleComparisons.some(item => item.id === focused.id)) visibleComparisons[visibleComparisons.length - 1] = focused;
-  const compareOption: EChartsOption = { animation: false, backgroundColor: "#fff", grid: { left: 8, right: 20, top: 24, bottom: 8, outerBoundsMode: "same", outerBoundsContain: "all" },
-    tooltip: { trigger: "item", renderMode: "richText" }, xAxis: { ...LIGHT_AXIS_STYLE, type: "value", name: meta.unit, scale: true },
-    yAxis: { ...LIGHT_AXIS_STYLE, type: "category", inverse: true, data: visibleComparisons.map(item => item.id) },
+  const compareOption: EChartsOption = { animation: false, backgroundColor: palette.canvas, grid: { left: 8, right: 20, top: 24, bottom: 8, outerBoundsMode: "same", outerBoundsContain: "all" },
+    tooltip: { trigger: "item", renderMode: "richText", ...palette.tooltip }, xAxis: { ...palette.axis, type: "value", name: meta.unit, scale: true },
+    yAxis: { ...palette.axis, type: "category", inverse: true, data: visibleComparisons.map(item => item.id) },
     series: [{ type: "bar", barMaxWidth: 16, data: visibleComparisons.map(item => ({ name: item.id, value: item.value,
-      itemStyle: { color: target.kind !== "all" && target.id === item.id ? "#e7a34b" : "#78a8ec", borderRadius: [0, 3, 3, 0] } })) }] };
+      itemStyle: { color: target.kind !== "all" && target.id === item.id ? "#e7a34b" : "#78a8ec", borderRadius: [0, 3, 3, 0] },
+      label: { color: palette.dark ? "#dbe7f4" : "#173b6c" } })) }] };
   const map = spatial && sameQueryScope(data.scope, spatial.scope) ? spatial : null;
   const usingTool = Boolean(toolView === view && useTool && toolResult?.chart);
   const originalMetric = toolResult?.chart?.type === "line" ? toolLineMetadata(toolResult.chart.option).label

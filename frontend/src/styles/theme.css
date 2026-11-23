@@ -1,0 +1,169 @@
+/* ============================================================
+   主题色板（浅色 / 深色）
+   · 浅色值与改动前的字面量一致，因此基础层改用 var() 后浅色不变。
+   · 深色值放在 :root[data-theme="dark"]，用 @media screen 包住，
+     打印/导出（print 媒体）自动回落到浅色。
+   · 深色覆盖表 theme-dark.css 只做“原规则换色”，不在这里写组件样式。
+   ============================================================ */
+
+:root {
+  /* 页面与容器 */
+  --ain-bg-page: #edf5fc;
+  --ain-bg-glow: #e4f3ff;
+  --ain-surface: #fff;
+  --ain-surface-2: #f7fbff;
+  --ain-surface-3: #eef5ff;
+  --ain-surface-sunken: #f0f5fc;
+  --ain-border: #dbe7f3;
+  --ain-border-strong: #cbddef;
+
+  /* 文字 */
+  --ain-text-strong: #183153;
+  --ain-text: #365478;
+  --ain-text-muted: #6d819a;
+  --ain-text-faint: #8292a6;
+
+  /* 强调与状态 */
+  --ain-accent: #008f9d;
+  --ain-on-accent: #fff;
+  --ain-link: #176dff;
+  --ain-focus: #176dff;
+  --ain-overlay: rgb(12 29 51 / 48%);
+
+  /* 阴影 / 图表 / 滚动条 */
+  --ain-shadow-1: 0 2px 10px rgb(40 103 168 / 5%);
+  --ain-shadow-2: 0 20px 70px rgb(10 29 53 / 25%);
+  --ain-chart-canvas: #fff;
+  --ain-chart-canvas-deep: #102036;
+  --ain-scrollbar: #c9d9ea;
+
+  color-scheme: light;
+}
+
+@media screen {
+  :root[data-theme="dark"] {
+    --ain-bg-page: #0a121e;
+    --ain-bg-glow: #12233a;
+    --ain-surface: #121d2b;
+    --ain-surface-2: #16232f;
+    --ain-surface-3: #1a2b3c;
+    --ain-surface-sunken: #0e1a27;
+    --ain-border: #26384c;
+    --ain-border-strong: #35506b;
+
+    --ain-text-strong: #e9f1fa;
+    --ain-text: #c4d3e3;
+    --ain-text-muted: #93a8bd;
+    --ain-text-faint: #7c91a6;
+
+    --ain-accent: #2ec2d4;
+    --ain-on-accent: #04141c;
+    --ain-link: #6fb0ff;
+    --ain-focus: #6fb0ff;
+    --ain-overlay: rgb(3 9 16 / 72%);
+
+    --ain-shadow-1: 0 2px 10px rgb(0 0 0 / 40%);
+    --ain-shadow-2: 0 20px 70px rgb(0 0 0 / 55%);
+    --ain-chart-canvas: #0e1a27;
+    --ain-chart-canvas-deep: #0e1a27;
+    --ain-scrollbar: #2a3b4f;
+
+    color-scheme: dark;
+    background: var(--ain-bg-page);
+  }
+
+  /* 状态色：沿用 StatusFeedback.css 里已有的变量名，只换值。 */
+  :root[data-theme="dark"] .ain-app.ain-shell {
+    --ain-action: #3d7ef0;
+    --ain-action-hover: #5b92f5;
+
+    --ain-info-bg: #122a44;
+    --ain-info-border: #255181;
+
+    --ain-warning: #f0c079;
+    --ain-warning-bg: #3a2a12;
+    --ain-warning-border: #7a5a24;
+
+    --ain-error: #f2a2a0;
+    --ain-error-bg: #3a1a1a;
+    --ain-error-border: #7d3b3b;
+
+    --ain-success: #79d9b0;
+    --ain-success-bg: #122c24;
+    --ain-success-border: #2c6b55;
+  }
+
+  /* 首页色板（HomePage.css 先在 App.css 之前打包，用同前缀提高特异性）。 */
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home {
+    --hp-ink: #e8effa;
+    --hp-ink-2: #c7d5e8;
+    --hp-muted: #9cb0c8;
+    --hp-muted-2: #7d91aa;
+    --hp-line: #23364a;
+    --hp-line-2: #1b2b3b;
+    --hp-blue: #5c93ff;
+    --hp-blue-2: #7faeff;
+    --hp-cyan: #59d7f5;
+  }
+}
+
+/* ---------- 基础渲染 ---------- */
+html {
+  background: var(--ain-bg-page);
+}
+
+body {
+  color: var(--ain-text);
+  background: var(--ain-bg-page);
+}
+
+:root {
+  scrollbar-color: var(--ain-scrollbar) transparent;
+}
+
+::selection {
+  color: var(--ain-text-strong);
+  background: color-mix(in srgb, var(--ain-accent) 32%, transparent);
+}
+
+/* ---------- 页头主题开关（浅色/深色/跟随系统）---------- */
+.ain-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--ain-border-strong);
+  border-radius: 50%;
+  background: var(--ain-surface);
+  color: var(--ain-text-muted);
+  cursor: pointer;
+  transition: color .18s, border-color .18s, background-color .18s;
+}
+
+.ain-theme-toggle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ain-theme-toggle:hover {
+  color: var(--ain-accent);
+  border-color: var(--ain-accent);
+  background: var(--ain-surface-3);
+}
+
+.ain-theme-toggle[data-mode="dark"] {
+  color: var(--ain-accent);
+}
+
+.ain-theme-toggle:focus-visible {
+  outline: 2px solid var(--ain-focus);
+  outline-offset: 2px;
+}
+
+@media print {
+  .ain-theme-toggle {
+    display: none;
+  }
+}

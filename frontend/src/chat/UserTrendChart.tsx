@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import type { ChatResult } from '../types/backend';
 import ChartPanel from '../components/charts/ChartPanel';
+import { useChartPalette } from '../theme/chartPalette';
 import { userTrendMetrics, userTrendOption, type UserTrendMetric } from './userTrend';
 export default function UserTrendChart({ result, initialMetric = 'throughput' }: { result: ChatResult; initialMetric?: UserTrendMetric }) {
   const [metric, setMetric] = useState<UserTrendMetric>(initialMetric);
+  const palette = useChartPalette();
   const data = result.userTrend, subject = result.subject;
   if (!subject) return null;
   const valid = data?.points.filter(p => p[metric] !== null).length ?? 0;
@@ -17,7 +19,7 @@ export default function UserTrendChart({ result, initialMetric = 'throughput' }:
       当前指标有效 {valid} / {data?.points.length ?? 0} 条。缺失及时间断档不插值。</p>
     {data && valid > 0 ? <ChartPanel title={`${subject.id} · ${userTrendMetrics[metric].label}观测趋势`}
       description="实际采样；阈值来自本次判据，吞吐目标绑定本次基线均值。线条断开表示缺失或采样间断。"
-      option={userTrendOption(data, metric, result.userAssessment)} height={230} />
+      option={userTrendOption(data, metric, result.userAssessment, palette)} height={230} />
       : <p role="status" className="ain-ai-note">该指标暂无有效趋势采样，无法绘图；缺失数据不视为正常。</p>}
     {metric === 'throughput' && data?.goal?.target != null && <p className="ain-ai-note">
       目标 {data.goal.target.toFixed(2)} Mbps，基线 {data.goal.baseline?.toFixed(2)} Mbps；

@@ -13,8 +13,7 @@
 }
 .ain-app.ain-shell .ain-workbench > .ain-workbench-title { display: none; }
 .ain-app.ain-shell .ain-workbench > .ain-replay-controls { grid-column: 1 / -1; grid-row: 1; margin: 0; }
-.ain-app.ain-shell .ain-workbench > .ain-data-module.ain-feature-module,
-.ain-app.ain-shell .ain-workbench > .ain-ai-panel.ain-ai-v3 {
+.ain-app.ain-shell .ain-workbench > .ain-data-module.ain-feature-module {
   grid-row: 2;
   min-width: 0;
   min-height: 0;
@@ -28,7 +27,38 @@
   box-sizing: border-box;
 }
 .ain-app.ain-shell .ain-workbench > .ain-data-module.ain-feature-module { grid-column: 1; }
-.ain-app.ain-shell .ain-workbench > .ain-ai-panel.ain-ai-v3 { grid-column: 2; padding: 10px; }
+/* 右栏容器：预测预警告警条固定在顶部，助手卡片在下方独立滚动。
+   用户要求把告警面板放到「AI 网络助手」卡片上方（而不是卡片内部）。 */
+.ain-app.ain-shell .ain-workbench > .ain-ai-side {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  height: var(--ain-pane-height);
+  max-height: var(--ain-pane-height);
+  box-sizing: border-box;
+}
+.ain-app.ain-shell .ain-workbench > .ain-ai-side > .ain-ai-panel.ain-ai-v3 {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  box-sizing: border-box;
+  /* 用户要求：内容在卡片里均匀分布，不要出现底部空白区。
+     卡片高度跟随右栏固定高度，剩余空间等分到各内容块之间，最后一块贴底。 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+/* 内容超长时不要把各块压缩（否则输入框会被挤扁），交给卡片自身滚动。 */
+.ain-app.ain-shell .ain-workbench > .ain-ai-side > .ain-ai-panel.ain-ai-v3 > * { flex: 0 0 auto; }
 
 /* 右栏完整保留回答与方案，通过栏内滚动查看，不再按长答案拉高整页。 */
 .ain-app.ain-shell .ain-workbench .ain-ai-workspace { grid-template-columns: minmax(0, 1fr); gap: 8px; margin-top: 8px; padding-top: 8px; }
@@ -133,9 +163,10 @@
 @media (max-width: 1024px) {
   .ain-app.ain-shell .ain-workbench { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; padding: clamp(8px, 2vw, 16px); }
   .ain-app.ain-shell .ain-workbench > .ain-data-module.ain-feature-module,
-  .ain-app.ain-shell .ain-workbench > .ain-ai-panel.ain-ai-v3 { grid-column: 1; height: auto; max-height: none; overflow: visible; scrollbar-gutter: auto; }
-  .ain-app.ain-shell .ain-workbench > .ain-data-module.ain-feature-module { grid-row: 2; }
-  .ain-app.ain-shell .ain-workbench > .ain-ai-panel.ain-ai-v3 { grid-row: 3; }
+  .ain-app.ain-shell .ain-workbench > .ain-ai-side { grid-column: 1; height: auto; max-height: none; }
+  .ain-app.ain-shell .ain-workbench > .ain-data-module.ain-feature-module { grid-row: 2; overflow: visible; scrollbar-gutter: auto; }
+  .ain-app.ain-shell .ain-workbench > .ain-ai-side { grid-row: 3; }
+  .ain-app.ain-shell .ain-workbench > .ain-ai-side > .ain-ai-panel.ain-ai-v3 { overflow: visible; scrollbar-gutter: auto; }
   .ain-app.ain-shell .ain-workbench .ain-observation-panel,
   .ain-app.ain-shell .ain-workbench .ain-observation-trends,
   .ain-app.ain-shell .ain-workbench .ain-ue-comparison { contain: none; height: auto; max-height: none; overflow: visible; }

@@ -17,9 +17,10 @@ export default function ReferenceWindowControls({ state, act, scope, disabled, i
   const earliest = state.startMs;
   const blocked = disabled || state.locked || !state.ready;
   const clipped = state.customStartMs === null && cutoff - state.referenceMinutes * 60_000 < state.startMs;
-  // 窗口短于 3 小时时，小时趋势只有 1~2 个点，报告里的趋势图会向前补取数据
-  //（报告已标注"趋势参考区间"）。这里提前提示，避免用户以为报告混入了范围外数据。
-  const shortWindow = (toEpoch(scope.end) - toEpoch(scope.start)) < 3 * 3600_000;
+  // 用户要求：参考范围条只保留设置与区间，不再显示“窗口不足 3 小时”“先固定当前时刻”等说明文字。
+  // 起止同一天时右端只显示时刻，避免把“参考数据”整行挤成两行（右栏卡片只有 320~430px）。
+  const sameDay = scope.start.slice(0, 10) === scope.end.slice(0, 10);
+  const rangeEnd = sameDay ? scope.end.slice(11) : scope.end;
   function apply() {
     if (blocked || state.viewMode === "live") return;
     try {
@@ -39,9 +40,8 @@ export default function ReferenceWindowControls({ state, act, scope, disabled, i
         {PRESETS.map(minutes => <option key={minutes} value={minutes}>近{minutes}分钟{minutes === 60 ? "（默认）" : ""}</option>)}
         <option value="custom" disabled={state.viewMode === "live"}>自定义开始时间</option>
       </select>
-      <span className="ain-reference-actual">参考数据：{scope.start} — {scope.end}（北京时间）</span>
+      <span className="ain-reference-actual">参考数据：{scope.start} — {rangeEnd}</span>
       {clipped && <span className="ain-reference-hint">已按数据起点截断</span>}
-      {shortWindow && <span className="ain-reference-hint">窗口不足 3 小时：报告的趋势图会向前补取数据（报告内已标注）</span>}
     </div>
     {customOpen && state.viewMode !== "live" && <form className="ain-reference-row ain-reference-custom" onSubmit={event => { event.preventDefault(); apply(); }}>
       <label htmlFor={`${idPrefix}-start`}>开始时间</label><input id={`${idPrefix}-start`} type="datetime-local" step="1" value={draft} disabled={blocked}
@@ -50,6 +50,5 @@ export default function ReferenceWindowControls({ state, act, scope, disabled, i
       <span>结束固定为 {scope.end}</span><button type="submit" className="ain-button" disabled={blocked}>更新参考范围</button>
     </form>}
     {error && <p className="ain-reference-error" role="alert">{error}</p>}
-    <p className="ain-reference-hint">{state.viewMode === "live" ? "先固定当前时刻，或在数据区用双滑块选择历史范围。" : "快捷时长按选定结束时间向前计算开始；拖动开始滑块会切换为自定义范围。调整会清除当前研判，需重新提问。"} 两处参考设置同步，主时钟{state.playing ? '运行中' : '已暂停'}。</p>
   </div>;
 }

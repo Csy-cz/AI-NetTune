@@ -8,11 +8,16 @@ import { createRoot } from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
+// 主题色板（浅色/深色各一套 CSS 变量）；深色覆盖表在 App.tsx 里最后导入。
+import './styles/theme.css'
+import { ThemeProvider } from './theme/ThemeProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HashRouter>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </HashRouter>
   </StrictMode>,
 )

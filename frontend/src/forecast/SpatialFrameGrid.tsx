@@ -1,5 +1,6 @@
 import { record } from '../history/store';
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useChartPalette } from '../theme/chartPalette';
 import { fetchSpatialFrames } from "../services/backend";
 import type { SpatialFrame, SpatialFrameSeries } from "../services/backend";
 import "./SpatialFrameGrid.css";
@@ -45,8 +46,8 @@ function colorAt(t: number): string {
   return "rgb(215,48,39)";
 }
 
-function FrameCanvas({ frame, min, max, big = false }: {
-  frame: SpatialFrame; min: number; max: number; big?: boolean;
+function FrameCanvas({ frame, min, max, big = false, missing = "#e8edf4" }: {
+  frame: SpatialFrame; min: number; max: number; big?: boolean; missing?: string;
 }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
@@ -62,12 +63,12 @@ function FrameCanvas({ frame, min, max, big = false }: {
     for (let r = 0; r < rows; r += 1) {
       for (let c = 0; c < cols; c += 1) {
         const value = frame.values[r][c];
-        ctx.fillStyle = value == null || !Number.isFinite(value) ? "#e8edf4" : colorAt((value - min) / span);
+        ctx.fillStyle = value == null || !Number.isFinite(value) ? missing : colorAt((value - min) / span);
         // 画布 y 轴向下、数据 y 轴向上 → 翻转行序，与地图方向一致
         ctx.fillRect(c, rows - 1 - r, 1, 1);
       }
     }
-  }, [frame, min, max]);
+  }, [frame, min, max, missing]);
   return <canvas ref={ref} className={big ? "ain-spatial-main-canvas" : "ain-spatial-cell-canvas"} />;
 }
 
@@ -93,6 +94,9 @@ export default function SpatialFrameGrid({
   horizonMinutes?: number; archiveParentId?: string; savedSeries?: SpatialFrameSeries;
 }) {
   const [loaded, setLoaded] = useState<{ key: string; series?: SpatialFrameSeries; error?: string }>({ key: "" });
+  // 缺失像元的底色随主题：浅色用灰蓝，深色用深蓝灰，避免热力图变成一块白。
+  const palette = useChartPalette();
+  const missingFill = palette.dark ? "#22344a" : "#e8edf4";
   const [attempt, setAttempt] = useState(0);
   const [playback, setPlayback] = useState({ key: "", index: -1, playing: false });
   const [selectedMetric, setMetric] = useState(initialMetric);
@@ -225,7 +229,7 @@ export default function SpatialFrameGrid({
 
       <div className="ain-forecast-spatial-stage">
         <figure className={`ain-spatial-main${isFuture ? " is-future" : ""}`}>
-          {flat.length ? <FrameCanvas frame={current} min={min} max={max} big /> : <p className="ain-spatial-empty-frame">本帧暂无有效采样</p>}
+          {flat.length ? <FrameCanvas frame={current} min={min} max={max} missing={missingFill} big /> : <p className="ain-spatial-empty-frame">本帧暂无有效采样</p>}
         </figure>
 
         <div className="ain-spatial-side">
@@ -262,7 +266,7 @@ export default function SpatialFrameGrid({
               className={`ain-spatial-cell${future ? " is-future" : ""}${i === active ? " is-active" : ""}`}
               title={`${frame.start} — ${frame.end}`}
               onClick={() => { setPlayback({ key: requestKey, index: i, playing: false }); }}>
-              <FrameCanvas frame={frame} min={min} max={max} />
+              <FrameCanvas frame={frame} min={min} max={max} missing={missingFill} />
               <span>{label}</span>
               <time>{frame.start.slice(11, 16)}</time>
             </button>

@@ -1,6 +1,6 @@
 /* AI 右栏：紧凑纵向内容；不受旧管理面板三列规则影响。 */
 /* 仿真内闭环操作条（申报书创新点④）：状态徽标 + 应用/回滚 + 二次确认 */
-.ain-management-integrated .ain-sim-config { margin: 8px 0 10px; padding: 8px 10px; border: 1px solid #e2ecf7; border-radius: 7px; background: #f8fbff; }
+.ain-management-integrated .ain-sim-config { margin: 8px 0 10px; padding: 6px 9px; border: 1px solid #e2ecf7; border-radius: 7px; background: #f8fbff; }
 .ain-management-integrated .ain-sim-config-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #33587c; }
 .ain-management-integrated .ain-sim-config-badge { padding: 1px 7px; border-radius: 9px; background: #eef2f7; color: #5b7186; font-size: 11px; }
 .ain-management-integrated .ain-sim-config-badge.is-active { background: #e7f6ec; color: #2f7d4a; }
@@ -16,18 +16,22 @@
 .ain-management-integrated .ain-sim-history li { margin-bottom: 3px; line-height: 1.6; overflow-wrap: anywhere; }
 .ain-management-integrated .ain-sim-history li strong { margin-right: 6px; color: #33587c; }
 .ain-management-integrated .ain-sim-history li span { display: block; }
-/* 同段对比小表（闭环可观测性）：只读展示，4 列窄表，窄屏可横向滚动 */
-.ain-management-integrated .ain-sim-compare { width: 100%; margin-top: 8px; border-collapse: collapse; font-size: 11px; display: block; overflow-x: auto; }
-.ain-management-integrated .ain-sim-compare caption { caption-side: top; text-align: left; color: #5b7186; padding-bottom: 4px; }
+/* 同段对比表（闭环可观测性）：用户要求「数据不要挤在左侧，居中且加长」。
+   原来给表格加 display:block 会让它退化成收在左边的一小条；这里改为正常表格，
+   放在居中、有宽度上限的容器里，窄屏由容器横向滚动兜底。 */
+.ain-management-integrated .ain-sim-compare-wrap { width: min(100%, 620px); margin: 10px auto 0; overflow-x: auto; }
+.ain-management-integrated .ain-sim-compare { width: 100%; min-width: 340px; border-collapse: collapse; table-layout: fixed; font-size: 11.5px; }
+.ain-management-integrated .ain-sim-compare caption { caption-side: top; text-align: center; color: #5b7186; padding-bottom: 6px; }
 .ain-management-integrated .ain-sim-compare th,
-.ain-management-integrated .ain-sim-compare td { padding: 3px 6px; border-bottom: 1px solid #eef3f9; text-align: right; white-space: nowrap; }
+.ain-management-integrated .ain-sim-compare td { padding: 5px 8px; border-bottom: 1px solid #eef3f9; text-align: right; white-space: nowrap; }
 .ain-management-integrated .ain-sim-compare thead th { color: #627b94; font-weight: 500; border-bottom: 1px solid #dfe9f4; }
+.ain-management-integrated .ain-sim-compare thead th:first-child { width: 34%; }
 .ain-management-integrated .ain-sim-compare tbody th { text-align: left; color: #4c657e; font-weight: 400; }
 .ain-management-integrated .ain-sim-compare td.is-up { color: #2f7d4a; }
 .ain-management-integrated .ain-sim-compare td.is-down { color: #b3261e; }
 .ain-app.ain-shell .ain-workbench .ain-ai-v3 .ain-management-integrated { min-width: 0; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-.ain-management-integrated .ain-plan-list { display: grid; gap: 6px; }
-.ain-management-integrated .ain-suggestion-card { display: block; width: 100%; text-align: left; padding: 9px 10px; border: 1px solid #dce7f2; border-radius: 7px; background: #fafcff; }
+.ain-management-integrated .ain-plan-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: 6px; }
+.ain-management-integrated .ain-suggestion-card { display: block; width: 100%; text-align: left; padding: 7px 9px; border: 1px solid #dce7f2; border-radius: 7px; background: #fafcff; }
 .ain-management-integrated .ain-suggestion-card:hover:not(:disabled) { border-color: #8bbab9; }
 .ain-management-integrated .ain-suggestion-card.is-selected { border-color: #81bdb5; background: #f0f8f6; }
 .ain-management-integrated .ain-suggestion-card:disabled { opacity: .65; }
@@ -40,11 +44,11 @@
 .ain-management-integrated .ain-management-empty { margin: 0; padding: 8px 10px; background: #f6f9fc; border-radius: 6px; color: #6c839c; font-size: 12px; line-height: 1.65; }
 .ain-management-integrated .ain-management-muted { color: #74889d; font-size: 11px; line-height: 1.6; margin: 5px 0; overflow-wrap: anywhere; }
 .ain-management-integrated .ain-parameter-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.ain-management-integrated .ain-parameter-table th, .ain-management-integrated .ain-parameter-table td { text-align: left; padding: 7px 6px; border-bottom: 1px solid #e4edf5; color: #496782; }
+.ain-management-integrated .ain-parameter-table th, .ain-management-integrated .ain-parameter-table td { text-align: left; padding: 6px; border-bottom: 1px solid #e4edf5; color: #496782; }
 .ain-management-integrated .ain-parameter-table thead th { background: #f5f8fc; color: #72879e; font-weight: 500; }
 .ain-management-integrated .ain-parameter-table tbody th { font-weight: 500; }
 .ain-management-integrated .ain-parameter-table th span { display: block; margin-top: 2px; font-size: 11px; color: #6e859d; }
-.ain-management-integrated .ain-plan-form { padding: 9px; margin-top: 6px; border: 1px solid #dce7f2; border-radius: 6px; background: #fafcff; }
+.ain-management-integrated .ain-plan-form { padding: 8px; margin-top: 6px; border: 1px solid #dce7f2; border-radius: 6px; background: #fafcff; }
 .ain-management-integrated .ain-plan-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .ain-management-integrated .ain-parameter-field { display: grid; grid-template-columns: minmax(0, 1fr) minmax(70px, 115px); gap: 4px 8px; align-items: center; margin-bottom: 8px; color: #526f8b; font-size: 12px; }
 .ain-management-integrated .ain-parameter-field small { grid-column: 1 / -1; font-size: 11px; color: #7d8fa3; line-height: 1.5; }
@@ -53,10 +57,10 @@
 .ain-management-integrated .ain-plan-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 7px; }
 .ain-management-integrated .ain-management-warning, .ain-management-integrated .ain-management-notice { padding: 7px 9px; margin-top: 7px; border-radius: 6px; font-size: 12px; line-height: 1.6; background: #fff5e9; color: #966829; }
 .ain-management-integrated .ain-management-notice { background: #edf8f4; color: #387c6b; }
-.ain-management-integrated .ain-effect-pending { padding: 9px 10px; border: 1px dashed #cfdeed; border-radius: 6px; background: #fafcff; }
+.ain-management-integrated .ain-effect-pending { padding: 8px 9px; border: 1px dashed #cfdeed; border-radius: 6px; background: #fafcff; }
 .ain-management-integrated .ain-effect-pending strong { font-size: 12px; font-weight: 500; color: #5b7996; }
 .ain-management-integrated .ain-effect-pending p { margin-top: 3px; color: #7a8fa4; font-size: 11px; line-height: 1.6; }
-.ain-management-integrated .ain-manual-tasks { margin-top: 7px; padding: 8px 10px; border-left: 2px solid #d2aa66; background: #fffcf5; color: #7b6747; font-size: 12px; line-height: 1.6; }
+.ain-management-integrated .ain-manual-tasks { margin-top: 7px; padding: 7px 9px; border-left: 2px solid #d2aa66; background: #fffcf5; color: #7b6747; font-size: 12px; line-height: 1.6; }
 .ain-management-integrated .ain-manual-tasks ul { margin: 4px 0 0; padding-left: 18px; }
 .ain-management-integrated .ain-effect-conclusion { margin-bottom: 6px; color: #397f78; font-size: 12px; line-height: 1.65; }
 /* 全部指标对比表：一次看全，不必在下拉里逐个挑 */

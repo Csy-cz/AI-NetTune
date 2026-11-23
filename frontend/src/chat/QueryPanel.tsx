@@ -5,10 +5,8 @@ import { createPortal } from 'react-dom';
 import { WorkspacePresentationContext } from '../pages/workbench/WorkspacePresentationContext';
 import type useNetworkQuery from "../hooks/useNetworkQuery";
 import type { DashboardData, QueryScope, SpatialMapData } from "../types/backend";
-import type { TreatmentPlan } from "../types/plan";
 import type { ForecastHandoff } from "../forecast/types";
-import { scopeLabel, exportReport, fetchSimConfig } from "../services/backend";
-import { formatReplayTime } from "../replay/replayState";
+import { scopeLabel } from "../services/backend";
 import ManagementModule from "../components/management/ManagementModule";
 import ForecastComparePanel from "../components/charts/ForecastComparePanel";
 import type { ManagementHandle } from "../components/management/preparePlan";
@@ -69,8 +67,6 @@ export default function QueryPanel({ query, scenario, window: scopeWindow, disab
   const [sendNoticeState, setSendNoticeState] = useState({ key: draftKey, text: '' });
   const sendNotice = sendNoticeState.key === draftKey ? sendNoticeState.text : '';
   const setSendNotice = (text: string) => setSendNoticeState({ key: draftKey, text });
-  const [exporting, setExporting] = useState(false);
-  const [exportNotice, setExportNotice] = useState("");
   const [evidenceSelection, setEvidenceSelection] = useState<(EvidenceSelection & { diagnosisId: number; requestId: number }) | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   // 点案例后把问题填进输入框（只填不发送）；预填是"响应用户点击"的一次性同步动作，
@@ -103,97 +99,6 @@ export default function QueryPanel({ query, scenario, window: scopeWindow, disab
   // 跟随当前时不再禁用发送：点击发送会自动固定当前时刻（见 WorkbenchPage.submitAnalysis）
   const sendBlocked = forecastMode ? forecastPending || !onForecastQuestion : (disabled && !questionTime) || dataLoading || Boolean(dataError) || query.pending;
 
-  /** 生成并打开/下载分析报告（接口4）。报告口径与当前展示范围一致。 */
-  async function runExport(format: "md" | "html") {
-    if (!scope || exporting || forecastMode) return;
-    setExporting(true); setExportNotice("");
-    try {
-      const { url, reportId, bytes } = await exportReport(scope, format);
-      if (format === "html") {
-        globalThis.open(url, "_blank", "noopener");
-        setExportNotice(`报告 ${reportId} 已生成（${Math.round(bytes / 1024)} KB），已在新标签打开。`);
-      } else {
-        const a = document.createElement("a");
-        a.href = url; a.download = `${reportId}.md`;
-        document.body.appendChild(a); a.click(); a.remove();
-        setExportNotice(`报告 ${reportId} 已下载（${Math.round(bytes / 1024)} KB）。`);
-      }
-    } catch (error) {
-      setExportNotice(error instanceof Error ? `报告生成失败：${error.message}` : "报告生成失败");
-    } finally {
-      setExporting(false);
-    }
-  }
-  /**
-   * 导出**本次分析**（快照）：把屏幕上这一轮的问题、结论、证据要点、方案与当前仿真配置
-   * 原样写成 Markdown 并下载。
-   *
-   * 与「导出该时段全网报告」的区别（复查 P1-24 那条边界）：
-   *   后者由后端**按时间窗口重新研判整网**，不携带本次 AP / 手改参数；
-   *   本按钮不重算，只导出"这一次问答的上下文"，两者名称与 aria 必须能区分。
-   */
-  async function exportSnapshot() {
-    if (exporting || forecastMode) return;
-    setExporting(true); setExportNotice("");
-    try {
-      const simStatus = await fetchSimConfig().catch(() => null);
-      const active = simStatus?.active ?? null;
-      const d = analysis?.diagnosis ?? result?.diagnosis ?? null;
-      const lines: string[] = [];
-      lines.push(`# AI-NetTune 本次分析快照`, "");
-      lines.push(`- 生成时间：${formatReplayTime(Date.now())}（北京时间）`);
-      lines.push(`- 场景：${scenario}`);
-      lines.push(`- 本次提问：${query.question || draft || "（未记录）"}`);
-      if (scope) lines.push(`- 分析范围：${scope.start} — ${scope.end}`);
-      lines.push(`- 数据来源：${active ? "simulation（仿真配置生效）" : "raw（原始数据）"}`);
-      lines.push(`- 配置版本：${active ? `${active.id}（revision ${simStatus?.revision ?? 0}）` : "无生效配置"}`);
-      if (active) {
-        lines.push(`- 生效对象：${active.apIds.join("、")}；生效时刻：${active.effectiveFrom}`);
-        lines.push(`- 生效参数：${Object.entries(active.params).map(([k, v]) => `${k}=${v}`).join("，")}`);
-        lines.push("", "> 注意：频谱预警仍基于原始频谱，本次配置未模拟其对频谱的影响。");
-      }
-      lines.push("", "## 研判结论");
-      if (d) {
-        lines.push(`- 状态：${d.currentState}（${d.state}）`);
-        if (d.anomalyType) lines.push(`- 异常类型：${d.anomalyType}`);
-        if (d.lastAnomalyAt) lines.push(`- 最近异常时刻：${d.lastAnomalyAt}`);
-        if (d.anomalySpans?.length) lines.push(`- 异常区间：${d.anomalySpans.map(s => `${s.start} — ${s.end}`).join("；")}`);
-        if (d.candidates?.length) {
-          lines.push("", "### 候选原因（按规则强度，非概率）");
-          d.candidates.slice(0, 5).forEach((c, i) => lines.push(`${i + 1}. ${c.cause}（规则强度 ${c.score}）`));
-        }
-      } else {
-        lines.push("（本次未产生研判结论）");
-      }
-      lines.push("", "## 处理方案");
-      const plans = (d as { plans?: TreatmentPlan[] } | null)?.plans ?? result?.plans ?? [];
-      if (plans.length) {
-        plans.forEach((p, i) => {
-          lines.push(`### ${i + 1}. ${p.name}`);
-          if (p.description) lines.push(p.description);
-        });
-      } else {
-        lines.push("（本次未生成方案：可能当前窗口判定为正常，或尚未完成研判）");
-      }
-      if (result?.chain?.length) {
-        lines.push("", "## 编排步骤");
-        result.chain.forEach((s, i) => lines.push(`${i + 1}. ${s.title ?? s.tool}：${s.summary ?? ""}`));
-      }
-      lines.push("", "---", "本快照由界面直接生成，不重新研判；数值口径以页面为准。");
-      const blob = new Blob([lines.join("\n")], { type: "text/markdown;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `本次分析_${formatReplayTime(Date.now()).replace(/[: ]/g, "-")}.md`;
-      document.body.appendChild(a); a.click(); a.remove();
-      URL.revokeObjectURL(url);
-      setExportNotice("已导出本次分析快照（Markdown）。");
-    } catch (error) {
-      setExportNotice(error instanceof Error ? `导出失败：${error.message}` : "导出失败");
-    } finally {
-      setExporting(false);
-    }
-  }
   function send(message = draft, preserveDiagnosis = false, retry = false) {
     if (forecastMode) {
       if (!message.trim() || forecastPending) return;
@@ -356,19 +261,41 @@ export default function QueryPanel({ query, scenario, window: scopeWindow, disab
         sourceQuestion={diagnosisQuestion || query.question} pending={query.pending} archiveParentId={query.archiveId} />
         : <section className="ain-ai-management-empty" aria-label="处理建议与效果"><h3>处理建议与效果</h3><p>{query.pending ? "正在研判本次问题，方案将在结果返回后展示。" : query.error ? "本次研判未完成，请返回问题研判页重试。" : "本次回答未提供处理方案，可继续提问需要处理的异常及目标。"}</p></section>)}
   </>);
-  return <section className="ain-ai-panel ain-ai-v3 ain-feature-module" id="ain-ai-module" aria-labelledby="ain-ai-title">
+  return <div className="ain-ai-side">
+    {/* 预测预警告警面板（用户要求）：放在「AI 网络助手」卡片**上方**的独立条，
+        宽度等于整个右栏；长回答只在卡片内部滚动，告警入口始终留在顶部。
+        预测研判模式下不重复展示，调整预测范围的入口保留在卡片内任务条里。 */}
+    {!forecastMode && <div className={`ain-forecast-alert${!historical && forecastAlertCount > 0 ? " has-risk" : ""}`} role="region" aria-label="预测预警告警面板">
+      <span className="ain-forecast-alert-icon" aria-hidden="true">
+        {!historical && forecastAlertCount > 0
+          ? <svg className="ain-forecast-risk-icon" viewBox="0 0 20 20"><path d="M10 2 19 18H1Z" fill="currentColor" /><path d="M10 7v5M10 15v.1" stroke="white" strokeWidth="2" strokeLinecap="round" /></svg>
+          : <svg className="ain-forecast-radar-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1.6" /><circle cx="10" cy="10" r="2.2" fill="currentColor" /></svg>}
+      </span>
+      <div className="ain-forecast-alert-body">
+        <strong>预测预警</strong>
+        <span>{historical ? "历史回顾期间不提供未来预测" : forecastLabel}</span>
+      </div>
+      <button type="button" className="ain-button" disabled={historical || forecastDisabled || query.pending || dataLoading || !onOpenForecast}
+        onClick={onOpenForecast} title={historical ? "历史查看期间不提供未来预测" : `查看频谱态势、未来风险及相关指标${forecastResultTime ? `；最近预测基准：${forecastResultTime}（北京时间），打开后更新` : "；尚未查询预测"}`}>{historical ? "历史不可用" : "查看未来风险"}</button>
+    </div>}
+    <section className="ain-ai-panel ain-ai-v3 ain-feature-module" id="ain-ai-module" aria-labelledby="ain-ai-title">
     <header className="ain-ai-heading">
       <div className="ain-ai-heading-title"><span className="ain-ai-symbol" aria-hidden="true">AI</span>
         <div><h2 id="ain-ai-title">AI 网络助手</h2><p>{workspace ? "在此提问，在工作区查看研判与方案" : "提问 → 原因与证据 → 处理方案 → 仿真效果对比"}</p></div></div>
       <div className="ain-ai-heading-actions">
-        <button type="button" className={onOpenForecast ? `ain-forecast-trigger${!historical && forecastAlertCount > 0 ? " has-risk" : ""}` : "ain-forecast-placeholder"} disabled={historical || forecastDisabled || query.pending || dataLoading || !onOpenForecast}
-          onClick={onOpenForecast} title={historical ? "历史查看期间不提供未来预测" : `查看频谱态势、未来风险及相关指标${forecastResultTime ? `；最近预测基准：${forecastResultTime}（北京时间），打开后更新` : "；尚未查询预测"}`}>{!historical && forecastAlertCount > 0 && <svg className="ain-forecast-risk-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 19 18H1Z" fill="currentColor" /><path d="M10 7v5M10 15v.1" stroke="white" strokeWidth="2" strokeLinecap="round" /></svg>}{forecastMode ? "调整预测范围" : "预测预警"} {!forecastMode && <span>{historical ? "历史不可用" : forecastLabel}</span>}</button>
         <span className="ain-ai-status" data-tone={query.error || dataError ? "error" : query.pending || dataLoading ? "info" : "neutral"}>{status}</span>
       </div>
     </header>
     {forecastMode && <div className="ain-forecast-task-mode"><strong>当前任务：预测风险研判</strong>
-      <button type="button" className="ain-button" onClick={() => { setDraft(''); setSendNotice(''); onLeaveForecast?.(); }} disabled={!onLeaveForecast}>切换到现存分析</button>
+      <div className="ain-forecast-task-actions">
+        <button type="button" className="ain-button" onClick={onOpenForecast} disabled={forecastDisabled || query.pending || !onOpenForecast}
+          title={`调整预测范围${forecastResultTime ? `；最近预测基准：${forecastResultTime}（北京时间）` : ""}`}>调整预测范围</button>
+        <button type="button" className="ain-button" onClick={() => { setDraft(''); setSendNotice(''); onLeaveForecast?.(); }} disabled={!onLeaveForecast}>切换到现存分析</button>
+      </div>
     </div>}
+    {/* 参考范围紧挨主时钟：两者都是“时间基准”设置，放在一起才能对上。
+       详细的选择方式说明移到卡片最底部，可收起。 */}
+    {!forecastMode && referenceControls}
     {replay ? <div className="ain-ai-scope ain-ai-replay-scope">
       <span>主时钟：{replay.currentTime}（北京时间）</span>
       {forecastMode ? <>
@@ -382,10 +309,6 @@ export default function QueryPanel({ query, scenario, window: scopeWindow, disab
         onClick={() => { if (forecastMode) { setDraft(''); setSendNotice(''); } (followingLive ? replay.onFreeze : replay.onExit)?.(); }}>{forecastMode ? "退出预测，跟随主时钟" : followingLive ? "固定当前时刻" : "退出分析，返回当前"}</button>
         : <span>{replay.analysisTime ? `分析截至：${replay.analysisTime}（北京时间）` : "固定查看时刻后发送问题"}</span>}
     </div> : <p className="ain-ai-scope">分析范围：{scope ? scopeLabel(scope) : `${scenario} · 后端默认范围`}</p>}
-    {forecastMode ? <details className="ain-question-time-settings"><summary>预测依据与提问说明</summary>
-      {forecastContext && <p>参考历史：{forecastContext.result.history.start} — {forecastContext.result.history.end}（北京时间）</p>}
-      <p>本区继续提问只分析所选预测风险，保持同一基准和关注时段；修改未来范围会打开预测预警，确认风险后再交给 AI。查询当前或历史问题，请先切换到现存分析。</p>
-    </details> : workspace ? <details className="ain-question-time-settings"><summary>参考时间与提问说明</summary>{referenceControls}<TimeSelectionGuide historical={historical} /></details> : <>{referenceControls}<TimeSelectionGuide historical={historical} /></>}
     {!forecastMode && analysisNotice && <p className="ain-ai-warning" role="status">{analysisNotice}</p>}
 
     <div className="ain-query-examples" aria-label={forecastMode ? "预测问题示例" : "问题示例"}>
@@ -405,11 +328,11 @@ export default function QueryPanel({ query, scenario, window: scopeWindow, disab
           {query.pending || forecastPending ? "分析中…" : "发送"}</button></div>
       <div className="ain-query-input-meta"><span>{forecastMode ? "继续分析所选预测风险 · Ctrl / Cmd + Enter" : followingLive ? (replay?.canAnalyzeQuestionTime ? "历史时间或未来预测可直接发送；未来问题会固定查看时刻并打开预测。" : "可先编辑问题；固定当前时刻后发送，主时钟播放状态不变。") : "未来问题进入预测预警；点击示例填入后可编辑 · Ctrl / Cmd + Enter"}</span><span>{draft.length}/500</span></div>
       {/* 常驻操作提示（核查清单第 10 条）：主时钟在走时必须让人看见
-          "时钟仍在走 / 分析时刻已固定"的区别，不能只靠一次性的警告条。 */}
+          "时钟仍在走 / 分析时刻已固定"的区别，不能只靠一次性的警告条。
+          用户要求文案精简，且不要在页面上露出 Markdown 的 ** 记号。 */}
       {followingLive && (
         <p className="ain-query-livehint" role="status">
-          主时钟正在播放：直接输入问题发送即可，系统会**自动固定当前时刻**并在结果里标注"分析截至"时间；
-          含历史时间或未来预测的问题按你给的时间处理。
+          跟随当前时直接发送即可，系统会<strong>自动固定分析时刻</strong>；带历史时间或未来预测的问题按你给的时间处理。
         </p>
       )}
     </form>
@@ -417,42 +340,16 @@ export default function QueryPanel({ query, scenario, window: scopeWindow, disab
     {sendNotice && <p className="ain-ai-warning" role="status">{sendNotice}</p>}
     {!forecastMode && currentEmpty && !disabled && !query.pending && <p className="ain-ai-note" role="status">当前窗口暂无采样，暂不能发起新分析；仍可查看及重试原截止时刻的分析。</p>}
     {!forecastMode && disabled && !query.pending && <p className="ain-ai-note" role={dataError ? "alert" : "status"}>{dataLoading ? "正在读取历史数据，完成后固定时刻即可提问。" : dataError ? `${dataError}；请在顶部重载数据。` : "当前查看时刻暂无有效采样，请返回当前或查看已到达的历史数据。"}</p>}
+    {/* 提问说明放在卡片最下方，默认收起；精简版只留要点，详细方法见预测弹窗。 */}
+    {forecastMode ? <details className="ain-question-time-settings"><summary>预测依据与提问说明</summary>
+      {forecastContext && <p>参考历史：{forecastContext.result.history.start} — {forecastContext.result.history.end}（北京时间）</p>}
+      <p>本区继续提问只分析所选预测风险，沿用同一基准与关注时段；改动未来范围会重新打开预测预警。查询当前或历史问题请先切换分析模式。</p>
+    </details> : workspace ? <details className="ain-question-time-settings"><summary>参考范围与提问说明</summary><TimeSelectionGuide historical={historical} /></details> : <TimeSelectionGuide historical={historical} />}
 
     {workspace ? <>
       {workspace.diagnosisHost && createPortal(diagnosisContent, workspace.diagnosisHost)}
       {workspace.plansHost && createPortal(planContent, workspace.plansHost)}
     </> : <div className="ain-ai-workspace">{diagnosisContent}{planContent}</div>}
-
-    {!forecastMode && <details className="ain-question-tools"><summary>本次记录与导出</summary>
-    <div className="ain-query-footer"><details className="ain-query-history-details">
-      <summary>本次查询记录 <span>{query.history.length}/6</span></summary>
-      <p className="ain-ai-note">最近 6 次 · 仅记录问题和回答摘要</p>
-      <div className="ain-query-history">{!query.history.length && <p className="ain-ai-note">暂无查询记录</p>}
-        {query.history.map(entry => <article key={entry.id} className={`ain-query-record${entry.failed ? " is-error" : ""}`}>
-          <div className="ain-query-record-meta"><strong>{entry.question}</strong><time>{new Date(entry.createdAt).toLocaleTimeString("zh-CN", { hour12: false })}</time></div>
-          <ReplyText text={entry.answer} /><p className="ain-ai-note">{entry.analysisMode === "history" ? "历史回顾" : "固定时刻分析"} · 分析截至：{entry.analysisTime ?? "未记录"}（北京时间）</p><p className="ain-ai-note">{entry.scope}（北京时间）</p></article>)}</div>
-    </details>
-      <span className="ain-report-actions">
-        {/* 与"该时段全网报告"区分：本按钮**不重算**，只把屏幕上这一轮的上下文（问题、
-            研判结论、方案、当前仿真配置版本）写成 Markdown，便于归档与答辩留证。 */}
-        <button type="button" className="ain-ai-text-button" disabled={exporting || forecastMode}
-          aria-label="导出本次分析快照：仅导出当前屏幕上的问题、结论、方案与配置版本，不重新研判"
-          title={forecastMode ? "预测研判暂不支持快照导出" : "导出本次分析：绑定本次提问、结论、方案与当前仿真配置版本；不重新研判，数值以页面为准"}
-          onClick={exportSnapshot}>{exporting ? "生成中…" : "导出本次分析"}</button>
-        {/*
-          按钮名必须说清导的是什么（核查清单第 11 条）：后端按"时段整窗"重新研判，
-          不携带本次提问的 AP、也不带手改参数；写作"分析报告"会被当成"本次问答快照"。 */}
-        <button type="button" className="ain-ai-text-button" disabled={!scope || exporting || forecastMode}
-          aria-label="导出该时段全网报告：后端重新研判整窗，包含当前场景的全部 AP"
-          title={forecastMode ? "预测研判可在分析记录中查看与导出" : "按当前展示时段导出该场景全部 AP 的报告：后端会重新研判整窗；本次提问的 AP 与手改参数不会被带入。如需保留本次问答与评估，请到分析记录页导出该条记录"}
-          onClick={() => runExport("html")}>{exporting ? "生成中…" : "导出该时段全网报告"}</button>
-        <button type="button" className="ain-ai-text-button" disabled={!scope || exporting || forecastMode}
-          title="同上，Markdown 版"
-          onClick={() => runExport("md")}>下载 Markdown</button>
-      </span>
-      <button type="button" className="ain-ai-text-button" disabled={query.pending || !query.history.length} onClick={query.clearHistory}>清空记录</button>
-    </div>
-    </details>}
-    {!forecastMode && exportNotice && <p className="ain-ai-note" role="status">{exportNotice}</p>}
-  </section>;
+    </section>
+  </div>;
 }

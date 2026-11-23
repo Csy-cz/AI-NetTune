@@ -3,12 +3,14 @@ import { useState } from 'react';
 import type { EChartsOption } from 'echarts';
 import type { SimulationResult } from '../../types/plan';
 import { METRIC_META } from '../../types/backend';
-import ChartPanel, { LIGHT_AXIS_STYLE } from '../charts/ChartPanel';
+import ChartPanel from '../charts/ChartPanel';
+import { useChartPalette } from '../../theme/chartPalette';
 import SpatialChart, { createProjection, SceneAxes, SCENE_VIEWBOX } from '../charts/SpatialChart';
 import { displayMetric } from '../../services/metrics';
 const colors = ['#67768a', '#2e69d2', '#36b7f3', '#27d7d2', '#58edc6'];
 const clock = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 export default function PlanEffects({ result, hideSummary = false }: { result: SimulationResult; hideSummary?: boolean }) {
+  const palette = useChartPalette();
   const [preferredView, setView] = useState<'metrics' | 'trend' | 'coverage'>(result.coverage?.points.length ? 'coverage' : 'metrics');
   // 切换方案后，不能停在新方案不存在的图表页签。
   const view = preferredView === 'coverage' && !result.coverage?.points.length
@@ -17,14 +19,14 @@ export default function PlanEffects({ result, hideSummary = false }: { result: S
   const m = result.metrics[Math.min(metricIndex, result.metrics.length - 1)], meta = m ? METRIC_META[m.key] : null;
   const t = result.trend, tm = t ? METRIC_META[t.metric] : null;
   const option: EChartsOption = view === 'trend' && t && tm ? {
-    animation: false, backgroundColor: '#fff', grid: { left: 8, right: 12, top: 24, bottom: 8, outerBoundsMode: 'same', outerBoundsContain: 'all' },
-    tooltip: { trigger: 'axis', renderMode: 'richText' },
-    xAxis: { ...LIGHT_AXIS_STYLE, type: 'time', axisLabel: { color: '#617c96', formatter: (n: number) => clock.format(n) } },
-    yAxis: { ...LIGHT_AXIS_STYLE, type: 'value', name: tm.unit, scale: true },
+    animation: false, backgroundColor: palette.canvas, grid: { left: 8, right: 12, top: 24, bottom: 8, outerBoundsMode: 'same', outerBoundsContain: 'all' },
+    tooltip: { trigger: 'axis', renderMode: 'richText', ...palette.tooltip },
+    xAxis: { ...palette.axis, type: 'time', axisLabel: { ...palette.axis.axisLabel, formatter: (n: number) => clock.format(n) } },
+    yAxis: { ...palette.axis, type: 'value', name: tm.unit, scale: true, nameTextStyle: { color: palette.axisName } },
     series: [ { type: 'line', name: '保持原配置（仿真）', connectNulls: false, showSymbol: false, itemStyle: { color: '#8da4be' }, data: t.points.map(p => [Date.parse(p.time), p.before]) },
       { type: 'line', name: '采用方案（仿真）', connectNulls: false, showSymbol: false, itemStyle: { color: '#238f90' }, lineStyle: { type: 'dashed' }, data: t.points.map(p => [Date.parse(p.time), p.after]) } ],
-  } : { animation: false, backgroundColor: '#fff', grid: { left: 8, right: 12, top: 24, bottom: 8, outerBoundsMode: 'same', outerBoundsContain: 'all' }, tooltip: { trigger: 'axis', renderMode: 'richText' },
-    xAxis: { ...LIGHT_AXIS_STYLE, type: 'category', data: ['保持原配置', '采用方案'] }, yAxis: { ...LIGHT_AXIS_STYLE, type: 'value', name: meta?.unit ?? '', scale: true },
+  } : { animation: false, backgroundColor: palette.canvas, grid: { left: 8, right: 12, top: 24, bottom: 8, outerBoundsMode: 'same', outerBoundsContain: 'all' }, tooltip: { trigger: 'axis', renderMode: 'richText', ...palette.tooltip },
+    xAxis: { ...palette.axis, type: 'category', data: ['保持原配置', '采用方案'] }, yAxis: { ...palette.axis, type: 'value', name: meta?.unit ?? '', scale: true, nameTextStyle: { color: palette.axisName } },
     series: [{ type: 'bar', barMaxWidth: 38, data: [ { value: m?.before ?? null, itemStyle: { color: '#8da4be' } }, { value: m?.after ?? null, itemStyle: { color: '#238f90' } } ] }] };
   const c = result.coverage, projection = c ? createProjection(c.area) : null;
   return <>
