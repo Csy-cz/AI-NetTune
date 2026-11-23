@@ -33,6 +33,7 @@ _LOCK = threading.Lock()
 _ACTIVE: dict | None = None          # 当前生效的配置版本（None = 无）
 _VERSIONS: list[dict] = []           # 历史版本（最近 50 条）
 _REVISION = 0                        # 配置修订号：每次应用/回滚 +1（缓存与留痕用）
+_LAST_PERSISTED = True               # 最近一次保存是否成功落盘（供接口给前端明确反馈）
 
 
 def _load() -> None:
@@ -49,14 +50,16 @@ def _load() -> None:
         _ACTIVE, _VERSIONS, _REVISION = None, [], 0
 
 
-def _save() -> None:
+def _save() -> bool:
+    """持久化到磁盘并返回是否成功。只读环境返回 False：内存仍生效，但重启后丢失。"""
     try:
         CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
         payload = {"active": (_ACTIVE or {}).get("id"), "revision": _REVISION,
                    "versions": _VERSIONS[-50:]}
         CONFIG_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        return True
     except OSError:
-        pass    # 只读环境：内存里仍然生效，只是重启后丢失
+        return False    # 只读环境：内存里仍然生效，只是重启后丢失
 
 
 _load()
@@ -75,6 +78,19 @@ def versions() -> list[dict]:
     return list(reversed(_VERSIONS))
 
 
+def persistence_info() -> dict:
+    """给接口的持久化反馈：前端据此区分"已落盘"与"仅内存、重启丢失"。"""
+    if _LAST_PERSISTED:
+        message = "已写入磁盘，服务重启后配置保留"
+    else:
+        message = "写入失败：配置仅本次运行有效，服务重启后将丢失"
+    return {
+        "persisted": _LAST_PERSISTED,
+        "storage": str(CONFIG_PATH),
+        "message": message,
+    }
+
+
 def apply(scenario: str, ap_ids: list[str], params: dict, effective_from: str,
           baseline: dict | None = None, note: str = "", plan_id: str | None = None) -> dict:
     """把一组参数应用为**仿真生效配置**。
@@ -82,7 +98,7 @@ def apply(scenario: str, ap_ids: list[str], params: dict, effective_from: str,
     params 是本次改动；target 由 `normalize_target(params, 当前目标)` 补成完整状态，
     因此"只改倾角"不会把功率意外重置。baseline 是原始工参（缺省用引擎默认值）。
     """
-    global _ACTIVE, _REVISION
+    global _ACTIVE, _REVISION, _LAST_PERSISTED
     if not ap_ids:
         raise ValueError("至少指定一个 AP")
     if not params:
@@ -114,13 +130,13 @@ def apply(scenario: str, ap_ids: list[str], params: dict, effective_from: str,
         version["revision"] = _REVISION
         _VERSIONS.append(version)
         _ACTIVE = version
-        _save()
+        _LAST_PERSISTED = _save()
         return dict(version)
 
 
 def rollback(version_id: str | None = None) -> dict:
     """停用配置（默认停用当前生效的），回到原始历史。"""
-    global _ACTIVE, _REVISION
+    global _ACTIVE, _REVISION, _LAST_PERSISTED
     with _LOCK:
         target = next((v for v in _VERSIONS if v.get("id") == version_id), None) if version_id else _ACTIVE
         if target is None:
@@ -131,7 +147,7 @@ def rollback(version_id: str | None = None) -> dict:
         if _ACTIVE and _ACTIVE.get("id") == target.get("id"):
             _ACTIVE = None
         _REVISION += 1          # 回滚同样产生新修订：缓存必须失效
-        _save()
+        _LAST_PERSISTED = _save()
         return dict(target)
 
 

@@ -5105,6 +5105,7 @@ def sim_config_apply(req: SimApplyRequest):
         "version": version,
         "status": sim_config.describe(),
         "configRevision": sim_config.revision(),
+        "persistence": sim_config.persistence_info(),
         "dataSource": "simulation",
         "notice": ("已应用到仿真网络：该时刻之后的**网络 KPI**会按新配置变化（研判/热力/趋势随之更新）；"
                    "频谱预警仍基于原始频谱，本轮未模拟配置对频谱的影响；"
@@ -5126,6 +5127,7 @@ def sim_config_rollback(versionId: str | None = Query(None, description="要回�
         "rolledBack": target,
         "status": sim_config.describe(),
         "configRevision": sim_config.revision(),
+        "persistence": sim_config.persistence_info(),
         "dataSource": "raw",
         "notice": "已恢复原始历史：该时段数据回到应用前状态。",
     })
