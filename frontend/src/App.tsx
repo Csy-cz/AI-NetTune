@@ -12,6 +12,8 @@ import "./styles/WorkbenchSplitLayout.css";
 
 export default function App() {
   const workbenchActive = useMatch("/workbench") !== null;
+  // 首页专属视觉（页头/页脚观感）用路由类限定，工作台与分析记录页不受影响。
+  const homeActive = useMatch("/") !== null;
   const [hasOpenedWorkbench, setHasOpenedWorkbench] = useState(workbenchActive);
   // 首次进入后保留同一个工作台实例，站内导航不再丢失回放与分析状态。
   if (workbenchActive && !hasOpenedWorkbench) setHasOpenedWorkbench(true);
@@ -22,7 +24,7 @@ export default function App() {
     return () => cancelAnimationFrame(frame);
   }, [workbenchActive]);
   return (
-    <div className="ain-app ain-shell">
+    <div className={`ain-app ain-shell${homeActive ? " is-home" : ""}`}>
       {/* 低调的基站与信号背景，不接收鼠标操作 */}
       <svg
         className="ain-background"
