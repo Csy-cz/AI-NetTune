@@ -630,21 +630,24 @@ export interface SimConfigStatus {
   revision: number;
 }
 
+function simParamValue(value: unknown): number | string {
+  // capacity 等枚举在当前配置和历史版本中保持一致，不能转换成 NaN。
+  if (typeof value === "string" && !/^-?\d+(\.\d+)?$/.test(value)) return value;
+  return numeric(value);
+}
+
 function parseSimStatus(raw: unknown): SimConfigStatus {
   const data = obj(raw);
   const active = data.active ? obj(data.active) : null;
-  const params = obj(active?.params);
-  const metric = (value: unknown): number | string => {
-    // 枚举参数（capacity）必须保留字符串，不能被 numeric() 变成数字
-    if (typeof value === "string" && !/^-?\d+(\.\d+)?$/.test(value)) return value;
-    return numeric(value);
-  };
+  // 未应用和回滚成功时 active=null 是合法状态，仅有生效配置时才解析参数。
+  // 仍严格校验非空配置的 params，不掩盖真实的接口结构错误。
+  const params = active ? obj(active.params) : {};
   return {
     active: active
       ? {
         id: str(active.id), scenario: str(active.scenario),
         apIds: strings(active.apIds),
-        params: Object.fromEntries(Object.entries(params).map(([k, v]) => [k, metric(v)])),
+        params: Object.fromEntries(Object.entries(params).map(([k, v]) => [k, simParamValue(v)])),
         effectiveFrom: str(active.effectiveFrom), appliedAt: str(active.appliedAt),
         note: str(active.note) || undefined, planId: str(active.planId) || undefined,
       }
@@ -667,7 +670,7 @@ export async function fetchSimVersions(signal?: AbortSignal): Promise<SimConfigV
     const params = obj(v.params);
     return {
       id: str(v.id), scenario: str(v.scenario), apIds: strings(v.apIds),
-      params: Object.fromEntries(Object.entries(params).map(([k, val]) => [k, numeric(val)])),
+      params: Object.fromEntries(Object.entries(params).map(([k, val]) => [k, simParamValue(val)])),
       effectiveFrom: str(v.effectiveFrom), appliedAt: str(v.appliedAt),
       note: str(v.note) || undefined, planId: str(v.planId) || undefined,
     };
