@@ -12,7 +12,9 @@
   /* ---- components/layout/AppHeader.css ---- */
   :root[data-theme="dark"] .ain-header { background: var(--ain-surface-2); border-bottom: 1px solid var(--ain-border); }
   :root[data-theme="dark"] .ain-header .ain-brand { color: var(--ain-text-strong); }
-  :root[data-theme="dark"] .ain-header .ain-brand-icon { color: var(--ain-link); }
+  /* 图标是 <img>，color 对它无效：改为换显深色字形版本（浅色版在 AppHeader.css 里默认可见）。 */
+  :root[data-theme="dark"] .ain-header .ain-brand-icon--light { display: none; }
+  :root[data-theme="dark"] .ain-header .ain-brand-icon--dark { display: inline-block; }
   :root[data-theme="dark"] .ain-header .ain-brand small { border-left: 1px solid var(--ain-border); color: var(--ain-text-strong); }
   :root[data-theme="dark"] .ain-header .ain-nav a { color: var(--ain-text); }
   :root[data-theme="dark"] .ain-header .ain-nav a:hover { color: var(--ain-link); background: var(--ain-info-bg); }
@@ -302,7 +304,11 @@
   :root[data-theme="dark"] .ain-workbench .ain-observation-map-notice { color: var(--ain-text); background: var(--ain-warning-bg); }
   :root[data-theme="dark"] .ain-workbench .ain-observation-map .ain-spatial-footer { color: var(--ain-link); }
   :root[data-theme="dark"] .ain-workbench .ain-observation-panel { border: 1px solid var(--ain-border); background: var(--ain-surface); }
-  :root[data-theme="dark"] .ain-workbench .ain-observation-eyebrow { color: var(--ain-link); }
+  /* 卡片标题与「网络空间主图」统一：同一字号/字重，并改用 --ain-text-strong。
+     浅色下这三处是 14~15px 的深色字，深色下若只靠继承会沿用 VisualCompact 的 --ain-ink。 */
+  :root[data-theme="dark"] .ain-workbench .ain-observation-panel h2,
+  :root[data-theme="dark"] .ain-workbench .ain-observation-trend-heading h2,
+  :root[data-theme="dark"] .ain-workbench .ain-ue-comparison-heading h2 { color: var(--ain-text-strong); font-size: 14px; font-weight: 700; }
   :root[data-theme="dark"] .ain-workbench .ain-observation-note { color: var(--ain-link); }
   :root[data-theme="dark"] .ain-workbench .ain-observation-kpi { border: 1px solid var(--ain-border); background: var(--ain-surface-2); }
   :root[data-theme="dark"] .ain-workbench .ain-observation-kpi > span { color: var(--ain-link); }
@@ -827,15 +833,11 @@
   :root[data-theme="dark"] .hp-eyebrow-dot { background: var(--ain-info-bg); }
   :root[data-theme="dark"] .hp-btn { color: var(--ain-text-strong); }
   :root[data-theme="dark"] .hp-meta-split { background: var(--ain-surface); }
-  :root[data-theme="dark"] .hp-scene-tab:hover { background: var(--ain-surface); }
-  :root[data-theme="dark"] .hp-scene-tab.is-on { color: var(--ain-text-strong); }
   :root[data-theme="dark"] .hp-scene-caption { color: var(--ain-text); }
   :root[data-theme="dark"] .hp-caps { background: var(--ain-surface); }
   :root[data-theme="dark"] .hp-cap-num { color: var(--ain-text-faint); }
   :root[data-theme="dark"] .hp-cap-icon { color: var(--ain-link); border: 1px solid var(--ain-border); }
   :root[data-theme="dark"] .hp-cap-tags span { color: var(--ain-link); background: var(--ain-surface-2); border: 1px solid var(--ain-border); }
-  :root[data-theme="dark"] .hp-cap-guide > summary { color: var(--ain-link); }
-  :root[data-theme="dark"] .hp-guide-content > p { color: var(--ain-link); }
   :root[data-theme="dark"] .ain-home :focus-visible { outline: 2px solid var(--ain-focus); }
   :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-footer { background: var(--ain-info-bg); border-top: 1px solid var(--ain-border); color: var(--ain-link); }
 
@@ -917,14 +919,6 @@
   :root[data-theme="dark"] .hp-btn:hover {
     color: #fff;
     background: linear-gradient(180deg, #326fc8 0%, #24508f 100%);
-  }
-  :root[data-theme="dark"] .hp-scene-tab.is-on {
-    color: #eaf2ff;
-    background: linear-gradient(180deg, #1e3c63, #152c49);
-    box-shadow: 0 10px 22px rgb(0 0 0 / 45%);
-  }
-  :root[data-theme="dark"] .hp-scene-tab.is-on:hover {
-    background: linear-gradient(180deg, #244a77, #1a3352);
   }
   :root[data-theme="dark"] .hp-hero-meta { color: #b7c9df; }
   :root[data-theme="dark"] .hp-scene-caption { color: #a9bcd2; }

@@ -38,6 +38,12 @@
   color: #1685ff;
 }
 
+/* 页头同时挂浅色/深色两版字形，默认只显示浅色主题版；
+   深色主题的换显规则写在 styles/theme-dark.css（@media screen 内，打印时回落浅色版）。 */
+.ain-header .ain-brand-icon--dark {
+  display: none;
+}
+
 .ain-header .ain-brand > span {
   display: flex;
   align-items: center;

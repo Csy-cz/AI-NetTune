@@ -74,6 +74,12 @@
 
   /* 状态色：沿用 StatusFeedback.css 里已有的变量名，只换值。 */
   :root[data-theme="dark"] .ain-app.ain-shell {
+    /* VisualCompact.css 的历史别名（浅色是深藏青/深蓝）：只用于 color。
+       不在这里重新映射，工作台的 h2/h3、KPI 标签等会保持深色字压深色底。
+       必须写在 .ain-app.ain-shell 上：那是 VisualCompact 定义它们的同一个元素。 */
+    --ain-ink: var(--ain-text-strong);
+    --ain-copy: var(--ain-text);
+
     --ain-action: #3d7ef0;
     --ain-action-hover: #5b92f5;
 

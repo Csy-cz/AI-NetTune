@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import logoUrl from "../../assets/logo.svg";
+import logoDarkUrl from "../../assets/logo-dark.svg";
 import ThemeToggle from "./ThemeToggle";
 import "./AppHeader.css";
 
@@ -18,8 +19,11 @@ export default function AppHeader() {
           className="ain-brand"
           aria-label="AI-NetTune 首页"
         >
-          {/* 品牌图标改用用户提供的图形（三节点拓扑 + 辐射弧），与浏览器标签页 favicon 同源 */}
-          <img className="ain-brand-icon" src={logoUrl} alt="" aria-hidden="true" />
+          {/* 品牌图标改用用户提供的图形（三节点拓扑 + 辐射弧），与浏览器标签页 favicon 同源。
+              深色主题下原图标是深藏青、落在深色页头上不可见，因此同时挂一枚浅色字形版本，
+              由 CSS（theme-dark.css）切换：纯样式切换首帧即正确，且打印时自动回落到深色字形版。 */}
+          <img className="ain-brand-icon ain-brand-icon--light" src={logoUrl} alt="" aria-hidden="true" />
+          <img className="ain-brand-icon ain-brand-icon--dark" src={logoDarkUrl} alt="" aria-hidden="true" />
 
           <span>
             <strong>AI-NetTune</strong>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="AI-NetTune">
+  <!-- 深色主题专用：几何与 logo.svg 完全一致，仅把深色字形换成浅色，
+       否则 #1b2b3a 的节点/连线落在深色页头上几乎不可见。 -->
+  <g fill="none" stroke="#e9f1fa" stroke-linecap="round">
+    <path d="M30 26 L62 50" stroke-width="9"/>
+    <path d="M30 74 L62 50" stroke-width="9"/>
+  </g>
+  <circle cx="28" cy="24" r="12.5" fill="#e9f1fa"/>
+  <circle cx="28" cy="76" r="12.5" fill="#e9f1fa"/>
+  <circle cx="64" cy="50" r="14.5" fill="#e9f1fa"/>
+  <path d="M79 30 Q89 50 79 70" fill="none" stroke="#4ec3e0" stroke-width="8" stroke-linecap="round"/>
+</svg>

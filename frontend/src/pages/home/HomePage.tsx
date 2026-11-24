@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { CSSProperties } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FORECAST_HORIZONS } from "../../forecast/config";
-import { MAX_HISTORY_QUESTIONS } from "../../history/store";
 import { REPLAY_CONFIG } from "../../replay/config";
 import HomeScene from "./HomeScene";
 import { SCENE_META } from "./scene";
@@ -10,13 +8,10 @@ import type { SceneKey } from "./scene";
 import useReveal from "./useReveal";
 import "./HomePage.css";
 
-// 首屏可切换的典型区域；场景数据与说明文案都在 scene.js 的 SCENES 里。
-const sceneTabs: { key: SceneKey; label: string }[] = [
-  { key: "campus", label: "智慧校园" },
-  { key: "mall", label: "智慧商场" },
-  { key: "traffic", label: "智慧交通" },
-  { key: "park", label: "智慧园区" },
-];
+// 用户要求：首屏场景切换条整条移除，场景固定为智慧校园（插画与场景说明保留）。
+// 需要恢复四项切换时，可从 backup/homepage-2026-11-24/ 或
+// `git checkout e8ea01b -- frontend/src/pages/home/` 取回，scene.js 里的四套场景一直没动。
+const scene: SceneKey = "campus";
 
 const capabilities = [
   {
@@ -24,32 +19,29 @@ const capabilities = [
     title: "观察与研判",
     description: "查看空间分布与趋势，固定时刻提问并核查证据。",
     tags: ["历史回放", "固定时刻", "证据核查"],
-    guide: "replay-guide",
-    question: "回放说明",
+    // 锚点保留：工作台/预测弹窗/方案效果的跨页链接仍指向这里（说明入口已按用户要求从首页移除）。
+    anchor: "replay-guide",
   },
   {
     kind: "forecast",
     title: "预测与预警",
     description: "查看未来频谱风险与区域态势，理解趋势变化。",
     tags: ["频谱风险", "区域态势", "未来时段"],
-    guide: "forecast-guide",
-    question: "预测说明",
+    anchor: "forecast-guide",
   },
   {
     kind: "plan",
     title: "方案与评估",
     description: "比较候选方案，调整参数并重新评估预计效果。",
     tags: ["候选方案", "参数调整", "效果对比"],
-    guide: "simulation-guide",
-    question: "方案说明",
+    anchor: "simulation-guide",
   },
   {
     kind: "record",
     title: "分析记录",
     description: "按问题回看研判、证据与评估，支持搜索导出。",
     tags: ["问题归档", "评估时间线", "导出备份"],
-    guide: "record-guide",
-    question: "记录说明",
+    anchor: "record-guide",
   },
 ] as const;
 
@@ -75,41 +67,24 @@ function FeatureIcon({ kind }: { kind: typeof capabilities[number]["kind"] }) {
 const delay = (ms: number) => ({ "--d": `${ms}ms` } as CSSProperties);
 
 export default function HomePage() {
-  // 四个说明只保留一句关键口径（每块“标签 + 正文”不超过 30 字），
-  // 工作台/预测弹窗里的 /#xxx-guide 链接仍指向这些 details。
-  const guideContent = {
-    "replay-guide": <p>默认 {REPLAY_CONFIG.initialSpeed ?? 1}×：现实 1 秒 = 数据 {Math.round((60 / REPLAY_CONFIG.realSecondsPerMinute) * (REPLAY_CONFIG.initialSpeed ?? 1))} 秒。</p>,
-    "forecast-guide": <p>可选 {FORECAST_HORIZONS[0]} 分钟至 {FORECAST_HORIZONS[FORECAST_HORIZONS.length - 1] / 60} 小时，不代表提前发现。</p>,
-    "simulation-guide": <p>比较候选方案与预计效果；不是实测，不下发配置。</p>,
-    "record-guide": <p>记录只存本浏览器，最多 {MAX_HISTORY_QUESTIONS} 个问题。</p>,
-  };
   const { hash, key } = useLocation();
-  const [scene, setScene] = useState<SceneKey>("campus");
-  // 首次切换后场景铺开速度加快（对应 .is-fast），避免每次等 2 秒入场。
-  const [switched, setSwitched] = useState(false);
   useReveal();
 
   useEffect(() => {
     if (!hash) return;
     const frame = requestAnimationFrame(() => {
+      // 卡片本身就是锚点（id 在 <article> 上），滚到卡片并聚焦即可。
       const target = document.getElementById(hash.slice(1));
-      if (target instanceof HTMLDetailsElement) target.open = true;
       target?.scrollIntoView({ block: "start" });
-      (target instanceof HTMLDetailsElement ? target.querySelector("summary") : target)?.focus({ preventScroll: true });
+      target?.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(frame);
   }, [hash, key]);
 
-  const pickScene = (next: SceneKey) => {
-    if (next === scene) return;
-    setSwitched(true);
-    setScene(next);
-  };
-
   return <main className="ain-home">
     <section className="hp-hero" aria-labelledby="home-title">
       <div className="hp-hero-panel" aria-hidden="true" />
-      <HomeScene scene={scene} fast={switched} />
+      <HomeScene scene={scene} fast={false} />
       <div className="hp-hero-veil" aria-hidden="true" />
       <span className="hp-hero-sweep" aria-hidden="true" />
 
@@ -146,18 +121,7 @@ export default function HomePage() {
       </div>
 
       <div className="hp-hero-dock" data-reveal style={delay(900)}>
-        <div className="hp-scene-tabs" role="tablist" aria-label="典型区域切换">
-          {sceneTabs.map(item => <button
-            key={item.key}
-            type="button"
-            role="tab"
-            aria-selected={item.key === scene}
-            className={`hp-scene-tab${item.key === scene ? " is-on" : ""}`}
-            onClick={() => pickScene(item.key)}
-          >
-            {item.label}
-          </button>)}
-        </div>
+        {/* 场景切换胶囊已按用户要求移除，只保留当前场景说明（插画仍是校园）。 */}
         <p key={scene} className="hp-scene-caption">{SCENE_META[scene].caption}</p>
       </div>
     </section>
@@ -170,16 +134,12 @@ export default function HomePage() {
         </div>
 
         <div className="hp-caps-grid">
-          {capabilities.map((item, index) => <article className="hp-cap" key={item.kind} data-reveal style={delay(index * 90)}>
+          {capabilities.map((item, index) => <article className="hp-cap" key={item.kind} id={item.anchor} tabIndex={-1} data-reveal style={delay(index * 90)}>
             <span className="hp-cap-num">{String(index + 1).padStart(2, "0")}</span>
             <span className="hp-cap-icon"><FeatureIcon kind={item.kind} /></span>
             <h3>{item.title}</h3>
             <p className="hp-cap-desc">{item.description}</p>
             <div className="hp-cap-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
-            <details className="hp-cap-guide" id={item.guide}>
-              <summary>{item.question}<span aria-hidden="true">→</span></summary>
-              <div className="hp-guide-content">{guideContent[item.guide]}</div>
-            </details>
           </article>)}
         </div>
       </div>

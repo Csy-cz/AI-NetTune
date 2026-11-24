@@ -39,7 +39,8 @@ export default function ObservationPanel({ data, target, period, onPeriod, onSel
     : target.kind === 'ue' ? [...new Set(snapshot.history.map(record => record.apId))] : [];
   const rsrp = snapshot.records.map(record => record.rsrpDbm).filter(Number.isFinite);
   return <aside className="ain-observation-panel" aria-labelledby="ain-observation-panel-title">
-    <header><span className="ain-observation-eyebrow">网络概况</span><h2 id="ain-observation-panel-title">{targetLabel(target)} · {target.kind === 'all' ? '网络概览' : target.kind === 'ap' ? '服务情况' : '用户体验'}</h2>
+    {/* 用户要求：去掉标题上方的「网络概况」小字（浅色/深色都去掉），只保留对象 · 统计口径标题。 */}
+    <header><h2 id="ain-observation-panel-title">{targetLabel(target)} · {target.kind === 'all' ? '网络概览' : target.kind === 'ap' ? '服务情况' : '用户体验'}</h2>
       <div className="ain-observation-tabs" aria-label="指标统计口径">
         <button type="button" aria-pressed={period === 'latest'} onClick={() => onPeriod('latest')}>最新帧</button>
         <button type="button" aria-pressed={period === 'window'} onClick={() => onPeriod('window')}>窗口均值</button>

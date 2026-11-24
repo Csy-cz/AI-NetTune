@@ -31,7 +31,6 @@
 .ain-workbench .ain-observation-link:focus-visible .ain-observation-link-hit { stroke: #ffffff55; }
 .ain-workbench .ain-observation-panel { grid-area: overview; display: flex; flex-direction: column; min-width: 0; border: 1px solid #d1e3f8; border-radius: 8px; background: #fff; padding: 10px; max-height: 480px; overflow-y: auto; }
 .ain-workbench .ain-observation-panel h2 { margin: 2px 0 7px; font-size: 16px; }
-.ain-workbench .ain-observation-eyebrow { font-size: 11px; color: #6383a5; }
 .ain-workbench .ain-observation-note { color: #6a8099; font-size: 11px; margin: 6px 0 0; overflow-wrap: anywhere; }
 .ain-workbench .ain-observation-kpis { flex: 1 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 9px; }
 .ain-workbench .ain-observation-kpi { display: flex; flex-direction: column; justify-content: center; padding: 8px; border: 1px solid #e0eaf6; border-radius: 7px; background: #f7fbff; }
