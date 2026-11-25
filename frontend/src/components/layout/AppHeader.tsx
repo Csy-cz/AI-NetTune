@@ -17,7 +17,7 @@ export default function AppHeader() {
         <NavLink
           to="/"
           className="ain-brand"
-          aria-label="AI-NetTune 首页"
+          aria-label="NetScope 首页"
         >
           {/* 品牌图标改用用户提供的图形（三节点拓扑 + 辐射弧），与浏览器标签页 favicon 同源。
               深色主题下原图标是深藏青、落在深色页头上不可见，因此同时挂一枚浅色字形版本，
@@ -26,9 +26,9 @@ export default function AppHeader() {
           <img className="ain-brand-icon ain-brand-icon--dark" src={logoDarkUrl} alt="" aria-hidden="true" />
 
           <span>
-            <strong>AI-NetTune</strong>
-            {/* 申报书原文项目名：按 13 + 13 字强制两行，视觉对齐（用户要求） */}
-            <small>基于LLM意图驱动的多模态<br />无线网络智能分析与管控平台</small>
+            <strong>NetScope</strong>
+            {/* 平台名称按两行展示，与左侧 NetScope 品牌共同组成完整名称。 */}
+            <small>校园无线网络监测、<br />研判与优化处置平台</small>
           </span>
         </NavLink>
 

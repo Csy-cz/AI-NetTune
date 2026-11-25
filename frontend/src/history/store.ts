@@ -390,7 +390,7 @@ export function downloadRecords(records: HistoryRecord[]) {
     const url = URL.createObjectURL(new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), records }, null, 2)], { type: 'application/json' }));
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AI-NetTune-records-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `NetScope-records-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

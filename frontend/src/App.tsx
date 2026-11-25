@@ -114,7 +114,7 @@ export default function App() {
 
       <footer className="ain-footer">
         <span>
-          AI-NetTune · 观察网络，研判原因，比较预计效果
+          NetScope · 观察网络，研判原因，比较预计效果
         </span>
         <span>
           数据来源与分析范围以工作台标识为准

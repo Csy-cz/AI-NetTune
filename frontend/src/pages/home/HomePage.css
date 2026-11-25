@@ -63,10 +63,11 @@
   gap: 22px;
   width: min(1300px, calc(100% - 88px));
   max-width: none;
-  height: 84px;
-  min-height: 0;
+  /* 随两行品牌文字收紧留白；内容增高时允许自然撑开。 */
+  height: auto;
+  min-height: 60px;
   margin: 0 auto;
-  padding: 0;
+  padding: 8px 0;
   grid-template-columns: none;
 }
 
@@ -171,7 +172,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: min(940px, calc(100vh - 84px));
+  min-height: min(940px, calc(100vh - 60px));
   padding: 28px 0 132px;
   background:
     radial-gradient(900px 620px at 92% 0%, rgba(120, 180, 255, .2) 0%, rgba(120, 180, 255, 0) 62%),
@@ -622,7 +623,7 @@
 @media (max-width: 680px) {
   .hp-wrap { width: calc(100% - 36px); }
 
-  .ain-app.ain-shell.is-home .ain-header-inner { width: calc(100% - 36px); height: 66px; gap: 10px; }
+  .ain-app.ain-shell.is-home .ain-header-inner { width: calc(100% - 36px); min-height: 56px; padding-block: 6px; gap: 10px; }
   .ain-app.ain-shell.is-home .ain-header .ain-brand { gap: 9px; }
   .ain-app.ain-shell.is-home .ain-header .ain-brand-icon { width: 28px; height: 28px; }
   .ain-app.ain-shell.is-home .ain-header .ain-brand strong { font-size: 16px; }
@@ -647,6 +648,15 @@
     align-items: flex-start;
     padding: 18px 18px;
   }
+}
+
+/* 手机宽度下保留品牌和主题开关，导航另起一行，避免横向拥挤。 */
+@media (max-width: 480px) {
+  .ain-app.ain-shell.is-home .ain-header-inner { flex-wrap: wrap; row-gap: 4px; }
+  .ain-app.ain-shell.is-home .ain-header .ain-brand { order: 0; }
+  .ain-app.ain-shell.is-home .ain-header .ain-theme-toggle { order: 1; margin-left: auto; }
+  .ain-app.ain-shell.is-home .ain-header .ain-nav { order: 2; flex: 1 0 100%; margin-left: 0; justify-content: center; }
+  .ain-app.ain-shell.is-home .ain-header .ain-nav a { flex: 1; }
 }
 
 @media (max-width: 400px) {

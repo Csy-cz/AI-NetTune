@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="AI-NetTune">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="NetScope">
   <!-- 用户提供的图形（三节点拓扑 + 辐射弧）在 32px 下的加粗简化版；
        白色圆角底保证在深色标签栏里也能看清。 -->
   <rect width="32" height="32" rx="7" fill="#ffffff"/>

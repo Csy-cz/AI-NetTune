@@ -180,7 +180,7 @@ export function renderPlanReport(snapshot: PlanExportSnapshot, configuration: Co
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
-<title>${escapeHtml(plan.name)}｜AI-NetTune 方案报告</title><style>
+<title>${escapeHtml(plan.name)}｜NetScope 方案报告</title><style>
 *{box-sizing:border-box}body{margin:0;background:#eef3f8;color:#25344a;font:15px/1.75 system-ui,"Microsoft YaHei",sans-serif}
 main{max-width:1000px;margin:32px auto;background:white;padding:48px 56px;box-shadow:0 6px 30px #243f6510}
 header{border-top:5px solid #3267d6;padding-top:22px;border-bottom:1px solid #dce4ef;padding-bottom:24px}
@@ -193,16 +193,16 @@ th:first-child:nth-last-child(2){width:27%}
 .candidate{border:1px solid #dce4ef;border-radius:8px;padding:16px 20px;margin:12px 0}footer{border-top:1px solid #dce4ef;margin-top:32px;padding-top:18px}
 @media(max-width:700px){main{margin:0;padding:24px 16px}h1{font-size:24px}th,td{padding:6px;font-size:12px}}
 @media print{@page{size:A4;margin:16mm}body{background:white;font-size:11pt}main{max-width:none;margin:0;padding:0;box-shadow:none}h1{font-size:23pt}h2{font-size:15pt;break-after:avoid}h3,h4{break-after:avoid}thead{display:table-header-group}tr{break-inside:avoid}th,td{font-size:10pt;padding:7px}header{break-inside:avoid}.screen-note{display:none}}
-</style></head><body><main><header><div class="brand">AI-NetTune · 无线网络优化</div><h1>网络优化方案报告</h1><p>${escapeHtml(plan.name)}</p><div class="subtitle">本次分析与配置快照 · 仿真评估</div></header>
+</style></head><body><main><header><div class="brand">NetScope · 校园无线网络监测、研判与优化处置平台</div><h1>网络优化方案报告</h1><p>${escapeHtml(plan.name)}</p><div class="subtitle">本次分析与配置快照 · 仿真评估</div></header>
 <p class="screen-note subtitle">本报告可离线阅读。需要 PDF 时，使用浏览器“打印 → 另存为 PDF”。</p>
 ${section('一、分析范围与数据说明', overview)}${section('二、研判结论与证据', findings)}
 ${section('三、所选方案与目标参数', parameters)}${section('四、方案仿真评估', effects)}
 ${section('五、当前仿真配置状态', configurationSection(snapshot, configuration))}${section('六、实施条件与交接事项', actions)}
-<footer>AI-NetTune · 导出内容用于方案核查与交接；本报告未执行任何网络配置操作。</footer></main></body></html>`;
+<footer>NetScope · 导出内容用于方案核查与交接；本报告未执行任何网络配置操作。</footer></main></body></html>`;
 }
 
 export function planExportFilename(snapshot: PlanExportSnapshot, extension: 'html' | 'json') {
-  const stem = `AI-NetTune_${snapshot.plan.name}_${snapshot.plan.objectIds.join('-')}_${snapshot.scope.end}`;
+  const stem = `NetScope_${snapshot.plan.name}_${snapshot.plan.objectIds.join('-')}_${snapshot.scope.end}`;
   // 复查（ESLint no-control-regex）：原先正则里带 \u0000-\u001f，规则直接报错。
   // 改成逐字符判断，行为等价：非法文件名字符与控制字符都替换为 '-'。
   const safe = [...stem]
