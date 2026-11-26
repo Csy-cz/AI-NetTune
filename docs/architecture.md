@@ -1,6 +1,6 @@
 # 系统架构说明
 
-本文记录 AI-NetTune 的实际分层、依赖方向、数据流，以及**已知的架构约束与风险**。
+本文记录 NetScope 的实际分层、依赖方向、数据流，以及**已知的架构约束与风险**。
 配套文档：`api.md`（接口契约）、`data_dict.md`（数据字典）、`fault_definition.md`（故障判据）、
 `acceptance.md`（能力验收）。
 
