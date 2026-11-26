@@ -17,7 +17,7 @@ export default function AppHeader() {
         <NavLink
           to="/"
           className="ain-brand"
-          aria-label="NetScope 首页"
+          aria-label="无线知微（NetScope）首页"
         >
           {/* 品牌图标改用用户提供的图形（三节点拓扑 + 辐射弧），与浏览器标签页 favicon 同源。
               深色主题下原图标是深藏青、落在深色页头上不可见，因此同时挂一枚浅色字形版本，
@@ -25,11 +25,13 @@ export default function AppHeader() {
           <img className="ain-brand-icon ain-brand-icon--light" src={logoUrl} alt="" aria-hidden="true" />
           <img className="ain-brand-icon ain-brand-icon--dark" src={logoDarkUrl} alt="" aria-hidden="true" />
 
-          <span>
-            <strong>NetScope</strong>
-            {/* 平台名称按两行展示，与左侧 NetScope 品牌共同组成完整名称。 */}
-            <small>校园无线网络监测、<br />研判与优化处置平台</small>
+          {/* 品牌名：中文在上、英文在下（用户提供的标识样式）。 */}
+          <span className="ain-brand-id">
+            <strong>无线知微</strong>
+            <small className="ain-brand-en">NetScope</small>
           </span>
+          {/* 竖线分隔 + 一句话定位（窄屏由 CSS 隐藏）。 */}
+          <span className="ain-brand-desc">以自然语言驱动的无线网络监测、<br />研判与处置平台</span>
         </NavLink>
 
         <nav className="ain-nav" aria-label="主导航">

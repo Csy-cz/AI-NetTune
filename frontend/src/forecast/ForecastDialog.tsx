@@ -89,7 +89,7 @@ export default function ForecastDialog({ request, result, pending, error, onClos
         if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog.current)) { event.preventDefault(); last.focus(); }
         else if (!event.shiftKey && (document.activeElement === last || document.activeElement === dialog.current)) { event.preventDefault(); first.focus(); }
       }}>
-      <header className="ain-forecast-dialog-heading"><div><span className="ain-forecast-eyebrow">NetScope · 未来风险</span>
+      <header className="ain-forecast-dialog-heading"><div><span className="ain-forecast-eyebrow">无线知微 · 未来风险</span>
         <div className="ain-forecast-title-row"><h2 id="ain-forecast-title">预测预警</h2><span className="ain-forecast-count">{pending ? "生成中" : error ? "更新失败" : result?.status === "ready" ? `${demo ? "示例 · " : ""}${scopedAlerts.length} 项需关注` : "暂不能预测"}</span>
           {/* 仿真配置生效标注（闭环切片 4b）：只读 /api/sim/config，失败静默不显示；
               不做任何数据计算，纯粹告诉用户"本轮预测是在 vN 配置下算的"。 */}

@@ -44,32 +44,41 @@
   display: none;
 }
 
-.ain-header .ain-brand > span {
+/* 品牌名：中文名在上、英文名在下（用户提供的标识样式）。 */
+.ain-header .ain-brand-id {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
+  justify-content: center;
   min-width: 0;
 }
 
 .ain-header .ain-brand strong {
   font-size: 21px;
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -.5px;
+  line-height: 1.2;
+  letter-spacing: .02em;
   white-space: nowrap;
 }
 
-.ain-header .ain-brand small {
+.ain-header .ain-brand-en {
+  margin-top: 1px;
+  color: #3c7bc9;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: .14em;
+  white-space: nowrap;
+}
+
+/* 竖分隔线 + 一句话定位；换行由内容里的 <br> 决定，窄屏隐藏（见下方 1200px 断点）。 */
+.ain-header .ain-brand-desc {
   padding-left: 14px;
   border-left: 1px solid #c7ddf5;
   color: #183d74;
   font-size: 12px;
-  font-weight: 600;
-  line-height: 1.6;
-  /* 项目全称较长（申报书原文）：允许折两行，不再 nowrap 撑破页头 */
-  white-space: normal;
-  overflow-wrap: anywhere;
-  max-width: 30ch;
+  font-weight: 500;
+  line-height: 1.55;
+  white-space: nowrap;
 }
 
 .ain-header .ain-nav {
@@ -141,16 +150,9 @@
   .ain-header-inner {
     gap: 16px;
   }
-  .ain-header .ain-brand > span {
-    display: block;
-  }
-  .ain-header .ain-brand small {
-    display: block;
-    margin-top: 2px;
-    padding-left: 0;
-    border-left: 0;
-    font-size: 11px;
-    font-weight: 500;
+  /* 窄屏放不下定位语，只保留「无线知微 / NetScope」两行品牌名。 */
+  .ain-header .ain-brand-desc {
+    display: none;
   }
 }
 

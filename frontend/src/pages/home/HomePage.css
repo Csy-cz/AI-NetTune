@@ -79,22 +79,28 @@
   filter: drop-shadow(0 6px 14px rgba(46, 107, 255, .32));
 }
 
-.ain-app.ain-shell.is-home .ain-header .ain-brand > span {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-width: 0;
+/* 首页页头使用同一套品牌结构（中文名 + 英文名 + 竖线定位语），这里只调整尺寸与配色。 */
+.ain-app.ain-shell.is-home .ain-header .ain-brand-id {
+  gap: 1px;
 }
 
 .ain-app.ain-shell.is-home .ain-header .ain-brand strong {
   font-size: 19px;
   font-weight: 800;
-  letter-spacing: -.015em;
+  letter-spacing: .01em;
   color: #0A1B33;
   white-space: nowrap;
 }
 
-.ain-app.ain-shell.is-home .ain-header .ain-brand small {
+.ain-app.ain-shell.is-home .ain-header .ain-brand-en {
+  color: #3C7BC9;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: .16em;
+}
+
+.ain-app.ain-shell.is-home .ain-header .ain-brand-desc {
   padding-left: 13px;
   border-left: 1px solid rgba(26, 76, 160, .22);
   color: #7183A3;
@@ -102,7 +108,6 @@
   font-weight: 400;
   line-height: 1.55;
   letter-spacing: .01em;
-  white-space: nowrap;
   max-width: none;
   overflow-wrap: normal;
 }
@@ -584,7 +589,6 @@
   .hp-wrap { width: calc(100% - 56px); }
 
   .ain-app.ain-shell.is-home .ain-header-inner { width: calc(100% - 56px); gap: 16px; }
-  .ain-app.ain-shell.is-home .ain-header .ain-brand small { display: none; }
 
   .hp-hero { min-height: 0; padding: 36px 0 56px; }
   .hp-hero-panel { width: 100%; height: 64%; bottom: auto; clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%); }
@@ -627,6 +631,7 @@
   .ain-app.ain-shell.is-home .ain-header .ain-brand { gap: 9px; }
   .ain-app.ain-shell.is-home .ain-header .ain-brand-icon { width: 28px; height: 28px; }
   .ain-app.ain-shell.is-home .ain-header .ain-brand strong { font-size: 16px; }
+  .ain-app.ain-shell.is-home .ain-header .ain-brand-en { font-size: 9.5px; letter-spacing: .12em; }
   .ain-app.ain-shell.is-home .ain-header .ain-nav { width: auto; flex: 1 1 auto; justify-content: flex-end; gap: 2px; }
   .ain-app.ain-shell.is-home .ain-header .ain-nav a { flex: 0 1 auto; height: 32px; padding: 0 8px; font-size: 12.5px; letter-spacing: 0; }
 

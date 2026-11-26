@@ -15,7 +15,9 @@
   /* 图标是 <img>，color 对它无效：改为换显深色字形版本（浅色版在 AppHeader.css 里默认可见）。 */
   :root[data-theme="dark"] .ain-header .ain-brand-icon--light { display: none; }
   :root[data-theme="dark"] .ain-header .ain-brand-icon--dark { display: inline-block; }
-  :root[data-theme="dark"] .ain-header .ain-brand small { border-left: 1px solid var(--ain-border); color: var(--ain-text-strong); }
+  /* 品牌名三元素：中文名继承 .ain-brand 的浅色，英文名走链接色，定位语走正文色。 */
+  :root[data-theme="dark"] .ain-header .ain-brand-en { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-header .ain-brand-desc { border-left: 1px solid var(--ain-border); color: var(--ain-text); }
   :root[data-theme="dark"] .ain-header .ain-nav a { color: var(--ain-text); }
   :root[data-theme="dark"] .ain-header .ain-nav a:hover { color: var(--ain-link); background: var(--ain-info-bg); }
   :root[data-theme="dark"] .ain-header .ain-nav a.active { color: var(--ain-link); background: var(--ain-info-bg); }
@@ -825,6 +827,7 @@
   :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header { background: var(--ain-surface); }
   :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-brand strong { color: var(--ain-text-strong); }
   :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-brand small { color: var(--ain-link); }
+  :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-brand-desc { color: var(--ain-text); }
   :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-nav a { color: var(--ain-link); }
   :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-nav a:hover { color: var(--ain-link); }
   :root[data-theme="dark"] .ain-app.ain-shell.is-home .ain-header .ain-nav a.active { color: var(--ain-link); }
